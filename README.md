@@ -1,15 +1,4 @@
-# meteor-react-boilerplate
-A starter project for React &amp; Meteor
-
-This repo aims to get you up and running with with React with little effort. It has sane defaults that
-most apps will use (router, accounts).
-
-Most of the content is in the 'imports' folder so that we can so serverside rendering more easily. Here's the
-rundown on what's included.
-
-For an in-depth example of how to use Meteor with React see
-[React-ive Meteor](https://github.com/AdamBrodzinski/react-ive-meteor). For flux support see the [Flux Leaderboard](https://github.com/AdamBrodzinski/meteor-flux-leaderboard) example app.
-
+# Coastline Market Registration | React + Meteor
 #### APIs & Packages
 - [Session](https://docs.meteor.com/api/session.html)
 - [Logging](https://atmospherejs.com/meteor/logging)
