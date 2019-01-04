@@ -6,16 +6,17 @@ export default class UserReg extends React.Component {
 
     constructor(props) {
         super(props)
+        const { email, password, confirmPassword } = this.props.formData
         this.state = {
-            email: "",
+            email,
             emailErrorText: null,
-            isEmailValid: false,
-            password: "",
-            confirmPassword: "",
-            isPasswordConfirmed: false,
+            isEmailValid: !!email,
+            password,
+            confirmPassword,
+            isPasswordConfirmed: !!password,
             passwordHelpText: null,
             confirmPasswordHelpText: null,
-            isPasswordValid: false,
+            isPasswordValid: !!password,
             submitErrorMessage: false,
         }
         // bind states to func
@@ -131,24 +132,24 @@ export default class UserReg extends React.Component {
     }
 
     render() {
-        const { isEmailValid, isPasswordValid, isPasswordConfirmed, submitErrorMessage, emailErrorText, confirmPasswordHelpText } = this.state
+        const { email, password, confirmPassword, isEmailValid, isPasswordValid, isPasswordConfirmed, submitErrorMessage, emailErrorText, confirmPasswordHelpText, passwordHelpText } = this.state
         return (
             <div className="card-body">
                 <h4 className="card-title">Registration</h4>
                 {submitErrorMessage ? this.displaySubmitError() : null}
                 <div className="form-group">
                     <label>Email {isEmailValid ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input onChange={(event) => this.setState({ email: event.target.value })} onBlur={this.checkEmail} type="text" name="" id="" className="form-control" placeholder="Your Email" />
+                    <input defaultValue={email} onChange={(event) => this.setState({ email: event.target.value })} onBlur={this.checkEmail} type="text" name="" id="" className="form-control" placeholder="Your Email" />
                     <small> {emailErrorText ? emailErrorText : null} </small>
                 </div>
                 <div className="form-group">
                     <label>Password {isPasswordValid ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input onChange={(event) => this.setState({ password: event.target.value })} onBlur={this.checkPassword} type="text" name="" id="" className="form-control" placeholder="Your Password" />
+                    <input defaultValue={password} onChange={(event) => this.setState({ password: event.target.value })} onBlur={this.checkPassword} type="text" name="" id="" className="form-control" placeholder="Your Password" />
                     <small> {passwordHelpText ? passwordHelpText : null} </small>
                 </div>
                 <div className="form-group">
                     <label>Confirm Password {isPasswordConfirmed ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input onChange={(event) => this.setState({ confirmPassword: event.target.value })} onBlur={this.checkConfirmPassword} type="text" name="" id="" className="form-control" placeholder="Your Email" />
+                    <input defaultValue={password} onChange={(event) => this.setState({ confirmPassword: event.target.value })} onBlur={this.checkConfirmPassword} type="text" name="" id="" className="form-control" placeholder="Your Email" />
                     <small> {confirmPasswordHelpText ? confirmPasswordHelpText : null} </small>
                 </div>
                 <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Click Me !! </button>
@@ -158,5 +159,6 @@ export default class UserReg extends React.Component {
 }
 
 UserReg.propTypes = {
-    nextPage: PropTypes.func
+    nextPage: PropTypes.func,
+    formData: PropTypes.object
 };

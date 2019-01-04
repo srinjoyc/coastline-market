@@ -14,24 +14,36 @@ export default class Registration extends Component {
     this.state = {
       currentPage: 4,
       formData: {
+        // User Reg
         email: null,
         password: null,
+        // User Info
         name: null,
         role: null,
         restaurantName: null,
         restaurantType: null,
         phoneNumber: null,
         companyAddress: null,
+        gMapsCompanyAddress: null,
+        // User Delivery Info
         deliveriesFrom: null,
         deliveriesTo: null,
         specialInstructions: null,
+        // User Payment Info
         paymentMethod: null,
         requestedTerms: null,
         accountingEmail: null,
+        // User Payment Info: if EFT is selected
         financialInstituionName: null,
         bankBranchAddress: null,
         bankAccountNumber: null,
         bankTransitNumber: null,
+        // User Payment Info: if CC is selected
+        creditCardNumber: null,
+        creditCardName: null,
+        creditCardExpiry: null,
+        creditCardCVC: null,
+
         inviteEmails: [],
       }
     }
@@ -50,9 +62,9 @@ export default class Registration extends Component {
     }, () => console.log(formData))
   }
 
-   // saves any filled values on current page and moves to previous page
+  // saves any filled values on current page and moves to previous page
   prevPage(submittedPageValues) {
-    const { formData } = this.state
+    const { formData, currentPage } = this.state
     // merge the (not null) submitted values into the state before going back
     this.setState({
       formData: merge(formData, submittedPageValues),
@@ -64,25 +76,25 @@ export default class Registration extends Component {
     const { currentPage } = this.state
     const { formData } = this.state
 
-    return(
+    return (
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 offset-3">
             <div className="card">
-              { currentPage === 1 &&
-                <UserReg nextPage={this.nextPage}/>
+              {currentPage === 1 &&
+                <UserReg formData={formData} nextPage={this.nextPage} />
               }
-              { currentPage === 2 &&
-                <UserInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+              {currentPage === 2 &&
+                <UserInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
-              { currentPage === 3 &&
-                <UserDeliveryInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+              {currentPage === 3 &&
+                <UserDeliveryInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
-              { currentPage === 4 &&
-                <UserPaymentInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+              {currentPage === 4 &&
+                <UserPaymentInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
-              { currentPage === 5 &&
-                <UserInvites formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+              {currentPage === 5 &&
+                <UserInvites formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
             </div>
           </div>

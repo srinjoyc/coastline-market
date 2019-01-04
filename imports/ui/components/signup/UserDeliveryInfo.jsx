@@ -17,7 +17,7 @@ export default class UserDeliveryInfo extends React.Component {
         this.state = {
             deliveriesFrom: deliveriesFrom ? deliveriesFrom : 8,
             deliveriesTo: deliveriesTo ? deliveriesTo : 17,
-            specialInstructions: specialInstructions ? specialInstructions : null,
+            specialInstructions,
             isTimesValid: true,
             invalidTimeHelpText: null,
         }
@@ -71,10 +71,16 @@ export default class UserDeliveryInfo extends React.Component {
     }
 
     goBack() {
+        const { isTimesValid } = this.state
         let submittedValues = {}
-        for (let key in obj) {
-            if (obj[key] !== null && obj[key] != "")
-                submittedValues[key] = obj
+        for (let key in this.state) {
+            if (this.state[key] !== null && this.state[key] != "")
+                if(key == "deliveriesFrom" && !isTimesValid)
+                    continue
+                if(key == "deliveriesTo" && !isTimesValid)
+                    continue
+
+                submittedValues[key] = this.state[key]
         }
         console.log(submittedValues)
         this.props.prevPage(submittedValues)

@@ -8,18 +8,21 @@ export default class UserInfo extends React.Component {
     constructor(props) {
         super(props)
         console.log(this.props)
+        const { name, role, restaurantName, restaurantType, phoneNumber, companyAddress, gMapsCompanyAddress } = this.props.formData
+        // !! is the boolean value (true if it exists)
         this.state = {
-            name: null,
-            role: null,
-            restaurantName: null,
-            restaurantType: null,
-            phoneNumber: null,
-            isValidPhoneNumber: null,
+            name,
+            role,
+            restaurantName,
+            restaurantType,
+            phoneNumber,
+            isValidPhoneNumber: !!phoneNumber,
             phoneNumberHelpText: null,
-            companyAddress: null,
-            isCompanyAddressValid: null,
-            gMapsCompanyAddress: null,
+            companyAddress,
+            isCompanyAddressValid: !!companyAddress,
+            gMapsCompanyAddress,
         }
+        console.log(this.state)
         // bind states to func
         this.submitPage = this.submitPage.bind(this)
         this.goBack = this.goBack.bind(this)
@@ -38,13 +41,11 @@ export default class UserInfo extends React.Component {
 
     handleCompanyAddressSelect(companyAddress) {
         geocodeByAddress(companyAddress)
-            .then(
-                results => this.setState({
+            .then(results => this.setState({
                     gMapsCompanyAddress: results,
                     companyAddress: results[0].formatted_address
                 }))
-            .then(
-                () => this.setState({
+            .then(() => this.setState({
                     isCompanyAddressValid: true
                 }))
             .catch(error => console.error('Error', error))
@@ -106,26 +107,36 @@ export default class UserInfo extends React.Component {
 
     // verifies password is valid w/ server
     checkPassword() {
-        Meteor.call('user.checkPassword', this.state.password, (err, resp) => {
+        const { password, passwordHelpText } = this.state
+        Meteor.call('user.checkPassword', password, (err, resp) => {
             // email did not pass regex or is empty or already registered
             if (err) {
                 // display err msg
                 console.log(err)
-                this.setState({ passwordHelpText: err.reason, isPasswordValid: false })
+                this.setState({ 
+                    passwordHelpText: err.reason, 
+                    isPasswordValid: false 
+                })
             } else if (resp) {
                 // email is good, remove err msg & display success
-                if (this.state.passwordHelpText) {
-                    this.setState({ passwordHelpText: null })
+                if (passwordHelpText) {
+                    this.setState({ 
+                        passwordHelpText: null 
+                    })
                 }
                 // displays the success badge
-                this.setState({ isPasswordValid: true })
+                this.setState({ 
+                    isPasswordValid: true 
+                })
             }
         })
     }
 
     // if validated, sends all values to parent.
     submitPage() {
-        const { name, role, restaurantName, restaurantType, isValidPhoneNumber, isCompanyAddressValid } = this.state
+        const { name, role, restaurantName, restaurantType, phoneNumber, companyAddress, gMapsCompanyAddress,
+            isValidPhoneNumber, isCompanyAddressValid } = this.state
+        const { nextPage } = this.props
         // these are the required fields that must be validated prior to continuing
         if (
             name &&
@@ -136,19 +147,21 @@ export default class UserInfo extends React.Component {
             isCompanyAddressValid
         ) {
             const submittedValues = {
-                name: this.state.name,
-                role: this.state.role,
-                restaurantName: this.state.restaurantName,
-                restaurantType: this.state.restaurantType,
-                phoneNumber: this.state.phoneNumber,
-                companyAddress: this.state.companyAddress
-
+                name,
+                role,
+                restaurantName,
+                restaurantType,
+                phoneNumber,
+                companyAddress,
+                gMapsCompanyAddress
             }
             // everything is good, flip the page
-            this.props.nextPage(submittedValues)
+            nextPage(submittedValues)
         } else {
             // something missing or not valid, show submit error
-            this.setState({ submitErrorMessage: true }, () => {
+            this.setState({ 
+                submitErrorMessage: true 
+            }, () => {
                 setTimeout(() => {
                     this.setState({ submitErrorMessage: false })
                 }, 3000)
@@ -157,7 +170,21 @@ export default class UserInfo extends React.Component {
     }
 
     goBack() {
-        this.props.prevPage(this.state)
+        const { isValidPhoneNumber,isCompanyAddressValid} = this.state
+        const { prevPage } = this.props
+        let submittedValues = {}
+        for (let key in this.state) {
+            if (this.state[key] !== null && this.state[key] != "")
+                // skip any keys that are filled but not valid
+                if(key == "phoneNumber" && !isValidPhoneNumber)
+                    continue
+                if(key == "companyAddress" && !isCompanyAddressValid)
+                    continue
+                
+                submittedValues[key] = this.state[key]
+        }
+        console.log(submittedValues)
+        prevPage(submittedValues)
     }
 
     // shows an alert box if all the fields are not valid on this page
@@ -170,19 +197,21 @@ export default class UserInfo extends React.Component {
     }
 
     render() {
+        const { name, role, restaurantName, restaurantType, phoneNumber, companyAddress, gMapsCompanyAddress, 
+            phoneNumberHelpText, isValidPhoneNumber, companyAddressHelpText, isCompanyAddressValid } = this.state
         return (
             <div className="card-body">
                 <h4 className="card-title">About You</h4>
                 {this.state.submitErrorMessage ? this.displaySubmitError() : null}
                 <div className="form-group row">
                     <div className="col-sm-6 col-12">
-                        <label>Your Name {this.state.name ? <span className="badge badge-success">Success</span> : null} </label>
-                        <input onBlur={(event) => this.setState({ name: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Name" />
+                        <label>Your Name {name? <span className="badge badge-success">Success</span> : null} </label>
+                        <input defaultValue={name} onBlur={(event) => this.setState({ name: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Name" />
                     </div>
                     <div className="col-sm-6 col-12">
-                        <label>Your Role {this.state.role ? <span className="badge badge-success">Success</span> : null} </label>
+                        <label>Your Role {role? <span className="badge badge-success">Success</span> : null} </label>
                         <div className="input-group">
-                            <select onChange={(event) => this.setState({ role: event.target.value })} className="custom-select">
+                            <select defaultValue={role} onChange={(event) => this.setState({ role: event.target.value })} className="custom-select">
                                 <option value="Head Chef">Head Chef</option>
                                 <option value="Sous Chef">Sous Chef</option>
                                 <option value="Purchasing">Purchasing</option>
@@ -191,13 +220,13 @@ export default class UserInfo extends React.Component {
                         </div>
                     </div>
                     <div className="col-sm-6 col-12">
-                        <label>Restaurant Name {this.state.restaurantName ? <span className="badge badge-success">Success</span> : null} </label>
-                        <input onBlur={(event) => this.setState({ restaurantName: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Restaurant Name" />
+                        <label>Restaurant Name {restaurantName ? <span className="badge badge-success">Success</span> : null} </label>
+                        <input defaultValue={restaurantName} onBlur={(event) => this.setState({ restaurantName: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Restaurant Name" />
                     </div>
                     <div className="col-sm-6 col-12">
-                        <label>Restaurant Type {this.state.restaurantType ? <span className="badge badge-success">Success</span> : null} </label>
+                        <label>Restaurant Type {restaurantType ? <span className="badge badge-success">Success</span> : null} </label>
                         <div className="input-group">
-                            <select onChange={(event) => this.setState({ restaurantType: event.target.value })} className="custom-select">
+                            <select defaultValue={restaurantType} onChange={(event) => this.setState({ restaurantType: event.target.value })} className="custom-select">
                                 <option value="One Location">One Location</option>
                                 <option value="Regional">Regional (3-5 locations)</option>
                                 <option value="National Chain<">National Chain</option>
@@ -206,14 +235,15 @@ export default class UserInfo extends React.Component {
                         </div>
                     </div>
                     <div className="col-12">
-                        <label>Phone Number {this.state.isValidPhoneNumber ? <span className="badge badge-success">Success</span> : null} </label>
-                        <input onChange={(event) => this.setState({ phoneNumber: event.target.value })} onBlur={this.checkPhoneNumber} type="text" name="" id="" className="form-control" placeholder="1-587-9000" />
-                        <small> {this.state.phoneNumberHelpText ? this.state.phoneNumberHelpText : null} </small>
+                        <label>Phone Number {isValidPhoneNumber ? <span className="badge badge-success">Success</span> : null} </label>
+                        <input defaultValue={phoneNumber} onChange={(event) => this.setState({ phoneNumber: event.target.value })} onBlur={this.checkPhoneNumber} type="text" name="" id="" className="form-control" placeholder="1-587-9000" />
+                        <small> {phoneNumberHelpText ? phoneNumberHelpText : null} </small>
                     </div>
                     <div className="col-12">
-                        <label>Company Address {this.state.isCompanyAddressValid ? <span className="badge badge-success">Success</span> : null} </label>
+                        <label>Company Address {isCompanyAddressValid ? <span className="badge badge-success">Success</span> : null} </label><br/>
+                        <small> Must select an address from the list. </small>
                         {this.renderGmapAutocomplete()}
-                        <small> {this.state.companyAddressHelpText ? this.state.companyAddressHelpText : null} </small>
+                        <small> {companyAddressHelpText ? companyAddressHelpText : null} </small>
                     </div>
                 </div>
                 <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Next !! </button>

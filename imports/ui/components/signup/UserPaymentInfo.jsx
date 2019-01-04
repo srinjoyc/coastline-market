@@ -7,71 +7,26 @@ export default class UserPaymentInfo extends React.Component {
     constructor(props) {
         super(props)
         console.log(props)
+        const { paymentMethod, requestedTerms, accountingEmail, financialInstituionName, 
+            bankBranchAddress, bankAccountNumber, bankTransitNumber,
+            creditCardNumber, creditCardName, creditCardExpiry, creditCardCVC } = this.props.formData
         this.state = {
-            name: null,
-            role: null,
-            restaurantName: null,
-            restaurantType: null,
-            phoneNumber: null,
-            companyAddress: null,
+            paymentMethod: paymentMethod? paymentMethod : "EFT (Direct Debit)",
+            requestedTerms: requestedTerms? requestedTerms : "NET 14",
+            accountingEmail,
+            financialInstituionName: financialInstituionName? financialInstituionName : "BANK OF NOVA SCOTIA",
+            bankBranchAddress,
+            isBranchAddressValid: !!bankBranchAddress,
+            bankAccountNumber,
+            bankTransitNumber,
+            creditCardNumber,
+            creditCardName,
+            creditCardExpiry,
+            creditCardCVC,
         }
         // bind states to func
-        this.checkEmptyValues = this.checkEmptyValues.bind(this)
         this.submitPage = this.submitPage.bind(this)
         this.goBack = this.goBack.bind(this)
-    }
-
-    // verifies email w/ server
-    checkEmptyValues() {
-        console.log("checking empty values")
-        // Meteor.call('user.checkAvailableEmail', this.state.email, (err, resp) => {
-        //     // email did not pass regex or is empty or already registered
-        //     if(err){
-        //         // display err msg
-        //         console.log(err)
-        //         this.setState({emailErrorText: err.reason, isEmailValid: false})
-        //     } else if(resp) {
-        //         // email is good, remove err msg & display success
-        //         if(this.state.emailErrorText) {
-        //             this.setState({emailErrorText: null})
-        //         }
-        //         // displays the success badge
-        //         this.setState({isEmailValid: true})
-        //     }
-        // })
-    }
-
-    // verifies password is valid w/ server
-    checkPassword() {
-        Meteor.call('user.checkPassword', this.state.password, (err, resp) => {
-            // email did not pass regex or is empty or already registered
-            if(err){
-                // display err msg
-                console.log(err)
-                this.setState({passwordHelpText: err.reason, isPasswordValid: false})
-            } else if(resp) {
-                // email is good, remove err msg & display success
-                if(this.state.passwordHelpText) {
-                    this.setState({passwordHelpText: null})
-                }
-                // displays the success badge
-                this.setState({isPasswordValid: true})
-            }
-        })
-    }
-
-    // checks if passwords match (just on front-end)
-    checkConfirmPassword() {
-        const {password, confirmPassword} = this.state
-        if (password !== confirmPassword) {
-            this.setState({ confirmPasswordHelpText: "Passwords do not match.", isPasswordConfirmed: false})
-        } else {
-            if(this.state.confirmPasswordHelpText) {
-                this.setState({confirmPasswordHelpText: null})
-            }
-            this.setState({ isPasswordConfirmed: true })
-        }
-
     }
 
     // if validated, sends all values to parent.
