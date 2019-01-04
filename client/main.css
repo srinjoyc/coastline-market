@@ -8,3 +8,26 @@ Header a, #login-buttons a {
   margin-right: 10px;
   color:inherit;
 }
+
+/* override package css for date/time picker */
+.rc-time-picker-panel-select {
+  overflow-x: hidden;
+}
+.rc-time-picker-input {
+  font-size: 1rem !important;
+}
+input.rc-time-picker-input, input.rc-time-picker-input:focus  {
+  border: none;
+}
+.rc-time-picker-panel-inner{
+  border: none !important;
+  font-size: 1rem !important;
+}
+.rc-time-picker-panel {
+  width: 112px !important;
+}
+
+/* prevent chrome border highlighting on focus */
+*:focus {
+  outline: none;
+}

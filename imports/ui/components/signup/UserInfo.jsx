@@ -1,86 +1,148 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
 
 export default class UserInfo extends React.Component {
 
     constructor(props) {
         super(props)
+        console.log(this.props)
         this.state = {
             name: null,
             role: null,
             restaurantName: null,
             restaurantType: null,
             phoneNumber: null,
+            isValidPhoneNumber: null,
+            phoneNumberHelpText: null,
             companyAddress: null,
+            isCompanyAddressValid: null,
+            gMapsCompanyAddress: null,
         }
         // bind states to func
-        this.checkEmptyValues = this.checkEmptyValues.bind(this)
         this.submitPage = this.submitPage.bind(this)
         this.goBack = this.goBack.bind(this)
+
+        //helpers
+        this.checkPhoneNumber = this.checkPhoneNumber.bind(this)
+        this.handleCompanyAddressChange = this.handleCompanyAddressChange.bind(this)
+        this.handleCompanyAddressSelect = this.handleCompanyAddressSelect.bind(this)
     }
 
+    handleCompanyAddressChange(companyAddress) {
+        this.setState({ 
+            companyAddress 
+        })
+    }
+
+    handleCompanyAddressSelect(companyAddress) {
+        geocodeByAddress(companyAddress)
+            .then(
+                results => this.setState({
+                    gMapsCompanyAddress: results,
+                    companyAddress: results[0].formatted_address
+                }))
+            .then(
+                () => this.setState({
+                    isCompanyAddressValid: true
+                }))
+            .catch(error => console.error('Error', error))
+    }
+
+    renderGmapAutocomplete() {
+        const { companyAddress  } = this.state
+        return (
+            <PlacesAutocomplete
+                value={companyAddress}
+                onChange={this.handleCompanyAddressChange}
+                onSelect={this.handleCompanyAddressSelect}
+            >
+                {({ getInputProps, suggestions, getSuggestionItemProps }) => (
+                    <div>
+                        <input
+                            {...getInputProps({
+                                placeholder: 'Search Places ...',
+                                className: 'location-search-input form-control',
+                                autoComplete: "off"
+                            })}
+                        />
+                        <div className="autocomplete-dropdown-container">
+                            {suggestions.map(
+                                suggestion => {
+                                const className = suggestion.active ? 'suggestion-item-active' : 'suggestion-item';
+                                // inline style for demonstration purpose
+                                const style = suggestion.active
+                                    ? { backgroundColor: '#00A0DC', cursor: 'pointer' }
+                                    : { backgroundColor: '#86888A', cursor: 'pointer' };
+                                return (
+                                    <div {...getSuggestionItemProps(suggestion, { className, style })}>
+                                        <span>{suggestion.description}</span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )}
+            </PlacesAutocomplete>
+        );
+    }
     // verifies email w/ server
-    checkEmptyValues() {
-        console.log("checking empty values")
-        // Meteor.call('user.checkAvailableEmail', this.state.email, (err, resp) => {
-        //     // email did not pass regex or is empty or already registered
-        //     if(err){
-        //         // display err msg
-        //         console.log(err)
-        //         this.setState({emailErrorText: err.reason, isEmailValid: false})
-        //     } else if(resp) {
-        //         // email is good, remove err msg & display success
-        //         if(this.state.emailErrorText) {
-        //             this.setState({emailErrorText: null})
-        //         }
-        //         // displays the success badge
-        //         this.setState({isEmailValid: true})
-        //     }
-        // })
+    checkPhoneNumber() {
+        const { phoneNumber } = this.state
+        const regexPhoneNumber = /^[+]?(1\-|1\s|1|\d{3}\-|\d{3}\s|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/g
+        if (phoneNumber.match(regexPhoneNumber)) {
+            this.setState({ 
+                isValidPhoneNumber: true, 
+                phoneNumberHelpText: null 
+            })
+        } else {
+            this.setState({ 
+                phoneNumberHelpText: "Phone number is not valid.", 
+                isValidPhoneNumber: false 
+            })
+        }
     }
 
     // verifies password is valid w/ server
     checkPassword() {
         Meteor.call('user.checkPassword', this.state.password, (err, resp) => {
             // email did not pass regex or is empty or already registered
-            if(err){
+            if (err) {
                 // display err msg
                 console.log(err)
-                this.setState({passwordHelpText: err.reason, isPasswordValid: false})
-            } else if(resp) {
+                this.setState({ passwordHelpText: err.reason, isPasswordValid: false })
+            } else if (resp) {
                 // email is good, remove err msg & display success
-                if(this.state.passwordHelpText) {
-                    this.setState({passwordHelpText: null})
+                if (this.state.passwordHelpText) {
+                    this.setState({ passwordHelpText: null })
                 }
                 // displays the success badge
-                this.setState({isPasswordValid: true})
+                this.setState({ isPasswordValid: true })
             }
         })
     }
 
-    // checks if passwords match (just on front-end)
-    checkConfirmPassword() {
-        const {password, confirmPassword} = this.state
-        if (password !== confirmPassword) {
-            this.setState({ confirmPasswordHelpText: "Passwords do not match.", isPasswordConfirmed: false})
-        } else {
-            if(this.state.confirmPasswordHelpText) {
-                this.setState({confirmPasswordHelpText: null})
-            }
-            this.setState({ isPasswordConfirmed: true })
-        }
-
-    }
-
     // if validated, sends all values to parent.
     submitPage() {
-        const {isEmailValid, isPasswordValid, isPasswordConfirmed} =  this.state
+        const { name, role, restaurantName, restaurantType, isValidPhoneNumber, isCompanyAddressValid } = this.state
         // these are the required fields that must be validated prior to continuing
-        if(isEmailValid && isPasswordValid && isPasswordConfirmed) {
+        if (
+            name &&
+            role &&
+            restaurantName &&
+            restaurantType &&
+            isValidPhoneNumber &&
+            isCompanyAddressValid
+        ) {
             const submittedValues = {
-                email: this.state.email,
-                password: this.state.password
+                name: this.state.name,
+                role: this.state.role,
+                restaurantName: this.state.restaurantName,
+                restaurantType: this.state.restaurantType,
+                phoneNumber: this.state.phoneNumber,
+                companyAddress: this.state.companyAddress
+
             }
             // everything is good, flip the page
             this.props.nextPage(submittedValues)
@@ -88,7 +150,7 @@ export default class UserInfo extends React.Component {
             // something missing or not valid, show submit error
             this.setState({ submitErrorMessage: true }, () => {
                 setTimeout(() => {
-                  this.setState({ submitErrorMessage: false })
+                    this.setState({ submitErrorMessage: false })
                 }, 3000)
             })
         }
@@ -101,9 +163,9 @@ export default class UserInfo extends React.Component {
     // shows an alert box if all the fields are not valid on this page
     displaySubmitError() {
         return (
-          <div className="alert alert-danger" role="alert">
-            <strong>Oh snap!</strong> Please fix the invalid fields.<br/>
-          </div>
+            <div className="alert alert-danger" role="alert">
+                <strong>Oh snap!</strong> Please fix the invalid fields.<br />
+            </div>
         )
     }
 
@@ -111,41 +173,51 @@ export default class UserInfo extends React.Component {
         return (
             <div className="card-body">
                 <h4 className="card-title">About You</h4>
-                {this.state.submitErrorMessage? this.displaySubmitError() : null }
+                {this.state.submitErrorMessage ? this.displaySubmitError() : null}
                 <div className="form-group row">
                     <div className="col-sm-6 col-12">
-                        <label>Your Name {this.state.isEmailValid? <span className="badge badge-success">Success</span> : null } </label>
-                        <input onChange={(event)=> this.setState({ name: event.target.value}) } onBlur={this.checkName} type="text" name="" id="" className="form-control" placeholder="Your Name"/>
-                        <small> {this.state.emailErrorText? this.state.emailErrorText : null } </small>
+                        <label>Your Name {this.state.name ? <span className="badge badge-success">Success</span> : null} </label>
+                        <input onBlur={(event) => this.setState({ name: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Name" />
                     </div>
                     <div className="col-sm-6 col-12">
-                        <label>Your Role {this.state.isEmailValid? <span className="badge badge-success">Success</span> : null } </label>
-                        <input onChange={(event)=> this.setState({ name: event.target.value}) } onBlur={this.checkName} type="text" name="" id="" className="form-control" placeholder="Your Name"/>
-                        <small> {this.state.emailErrorText? this.state.emailErrorText : null } </small>
+                        <label>Your Role {this.state.role ? <span className="badge badge-success">Success</span> : null} </label>
+                        <div className="input-group">
+                            <select onChange={(event) => this.setState({ role: event.target.value })} className="custom-select">
+                                <option value="Head Chef">Head Chef</option>
+                                <option value="Sous Chef">Sous Chef</option>
+                                <option value="Purchasing">Purchasing</option>
+                                <option value="Owner">Owner</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="col-sm-6 col-12">
-                        <label>Restaurant Name {this.state.isEmailValid? <span className="badge badge-success">Success</span> : null } </label>
-                        <input onChange={(event)=> this.setState({ name: event.target.value}) } onBlur={this.checkName} type="text" name="" id="" className="form-control" placeholder="Your Name"/>
-                        <small> {this.state.emailErrorText? this.state.emailErrorText : null } </small>
+                        <label>Restaurant Name {this.state.restaurantName ? <span className="badge badge-success">Success</span> : null} </label>
+                        <input onBlur={(event) => this.setState({ restaurantName: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Restaurant Name" />
                     </div>
                     <div className="col-sm-6 col-12">
-                        <label>Restaurant Type {this.state.isEmailValid? <span className="badge badge-success">Success</span> : null } </label>
-                        <input onChange={(event)=> this.setState({ name: event.target.value}) } onBlur={this.checkName} type="text" name="" id="" className="form-control" placeholder="Your Name"/>
-                        <small> {this.state.emailErrorText? this.state.emailErrorText : null } </small>
+                        <label>Restaurant Type {this.state.restaurantType ? <span className="badge badge-success">Success</span> : null} </label>
+                        <div className="input-group">
+                            <select onChange={(event) => this.setState({ restaurantType: event.target.value })} className="custom-select">
+                                <option value="One Location">One Location</option>
+                                <option value="Regional">Regional (3-5 locations)</option>
+                                <option value="National Chain<">National Chain</option>
+                                <option value="Grocery">Grocery</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="col-12">
-                        <label>Phone Number {this.state.isEmailValid? <span className="badge badge-success">Success</span> : null } </label>
-                        <input onChange={(event)=> this.setState({ name: event.target.value}) } onBlur={this.checkName} type="text" name="" id="" className="form-control" placeholder="Your Name"/>
-                        <small> {this.state.emailErrorText? this.state.emailErrorText : null } </small>
+                        <label>Phone Number {this.state.isValidPhoneNumber ? <span className="badge badge-success">Success</span> : null} </label>
+                        <input onChange={(event) => this.setState({ phoneNumber: event.target.value })} onBlur={this.checkPhoneNumber} type="text" name="" id="" className="form-control" placeholder="1-587-9000" />
+                        <small> {this.state.phoneNumberHelpText ? this.state.phoneNumberHelpText : null} </small>
                     </div>
                     <div className="col-12">
-                        <label>Company Address {this.state.isEmailValid? <span className="badge badge-success">Success</span> : null } </label>
-                        <input onChange={(event)=> this.setState({ name: event.target.value}) } onBlur={this.checkName} type="text" name="" id="" className="form-control" placeholder="Your Name"/>
-                        <small> {this.state.emailErrorText? this.state.emailErrorText : null } </small>
+                        <label>Company Address {this.state.isCompanyAddressValid ? <span className="badge badge-success">Success</span> : null} </label>
+                        {this.renderGmapAutocomplete()}
+                        <small> {this.state.companyAddressHelpText ? this.state.companyAddressHelpText : null} </small>
                     </div>
                 </div>
-                <button onClick={this.submitPage} type="button"className="btn btn-primary btn-lg btn-block"> Next !! </button>
-                <button onClick={this.goBack} type="button"className="btn btn-primary btn-lg btn-block"> Prev !! </button>
+                <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Next !! </button>
+                <button onClick={this.goBack} type="button" className="btn btn-primary btn-lg btn-block"> Prev !! </button>
             </div>
         );
     }

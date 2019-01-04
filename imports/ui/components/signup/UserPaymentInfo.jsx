@@ -6,6 +6,7 @@ export default class UserPaymentInfo extends React.Component {
 
     constructor(props) {
         super(props)
+        console.log(props)
         this.state = {
             name: null,
             role: null,

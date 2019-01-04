@@ -19,9 +19,12 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "history": "^3.0.0",
+    "indexof": "0.0.1",
     "lodash": "^4.17.11",
+    "rc-time-picker": "^3.5.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
+    "react-places-autocomplete": "^7.2.0",
     "react-router-dom": "^4.0.0-beta.6"
   }
 }

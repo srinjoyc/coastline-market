@@ -12,7 +12,7 @@ export default class Registration extends Component {
     super(props);
     // all the fields needed to create a new user
     this.state = {
-      currentPage: 5,
+      currentPage: 4,
       formData: {
         email: null,
         password: null,
@@ -35,47 +35,54 @@ export default class Registration extends Component {
         inviteEmails: [],
       }
     }
-    // give state access to these functions
+
     this.nextPage = this.nextPage.bind(this)
     this.prevPage = this.prevPage.bind(this)
   }
 
+  // saves data and moves to next page
   nextPage(submittedPageValues) {
+    const { formData, currentPage } = this.state
+    // merge the submitted values into the state before moving forward
     this.setState({
-      formData: merge(this.state.formData, submittedPageValues),
-      currentPage: this.state.currentPage + 1
-    }, () => console.log(this.state.formData))
+      formData: merge(formData, submittedPageValues),
+      currentPage: currentPage + 1
+    }, () => console.log(formData))
   }
 
+   // saves any filled values on current page and moves to previous page
   prevPage(submittedPageValues) {
+    const { formData } = this.state
+    // merge the (not null) submitted values into the state before going back
     this.setState({
-      formData: merge(this.state.formData, submittedPageValues),
-      currentPage: this.state.currentPage - 1
-    }, () => console.log(this.state.formData))
+      formData: merge(formData, submittedPageValues),
+      currentPage: currentPage - 1
+    }, () => console.log(formData))
   }
 
   render() {
     const { currentPage } = this.state
+    const { formData } = this.state
 
     return(
       <div className="container-fluid">
-        <div class="row">
+        <div className="row">
           <div className="col-md-6 offset-3">
             <div className="card">
               { currentPage === 1 &&
                 <UserReg nextPage={this.nextPage}/>
               }
               { currentPage === 2 &&
-                <UserInfo formData={this.state.formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+                <UserInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
               }
               { currentPage === 3 &&
-                <UserDeliveryInfo formData={this.state.formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+                <UserDeliveryInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
               }
               { currentPage === 4 &&
-                <UserPaymentInfo formData={this.state.formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+                <UserPaymentInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
               }
               { currentPage === 5 &&
-                <UserInvites formData={this.state.formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
+                <UserInvites formData={formData} prevPage={this.prevPage} nextPage={this.nextPage}/>
               }
             </div>
           </div>
