@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete'
 
 
 export default class UserInfo extends React.Component {
@@ -243,7 +243,6 @@ export default class UserInfo extends React.Component {
                         <label>Company Address {isCompanyAddressValid ? <span className="badge badge-success">Success</span> : null} </label><br/>
                         <small> Must select an address from the list. </small>
                         {this.renderGmapAutocomplete()}
-                        <small> {companyAddressHelpText ? companyAddressHelpText : null} </small>
                     </div>
                 </div>
                 <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Next !! </button>

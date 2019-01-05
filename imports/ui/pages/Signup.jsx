@@ -38,11 +38,13 @@ export default class Registration extends Component {
         bankBranchAddress: null,
         bankAccountNumber: null,
         bankTransitNumber: null,
+        gMapsBankBranchAddress: null,
         // User Payment Info: if CC is selected
         creditCardNumber: null,
         creditCardName: null,
         creditCardExpiry: null,
         creditCardCVC: null,
+        isCreditCardVerified: null,
 
         inviteEmails: [],
       }
