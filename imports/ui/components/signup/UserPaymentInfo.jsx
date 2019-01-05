@@ -10,14 +10,13 @@ export default class UserPaymentInfo extends React.Component {
     constructor(props) {
         super(props)
         console.log(props)
-        Logthis("suuuuuuuuup")
         const { paymentMethod, requestedTerms, accountingEmail, financialInstituionName, 
             bankBranchAddress, bankAccountNumber, bankTransitNumber, gMapsBankBranchAddress,
-            creditCardNumber, creditCardName, creditCardExpiryMonth, creditCardExpiryYear, creditCardCVC, isCreditCardVerified } = this.props.formData
+            creditCardNumber, creditCardName, creditCardExpiryMonth, creditCardExpiryYear, creditCardCVC } = this.props.formData
         this.state = {
             // basic info
             paymentMethod: paymentMethod? paymentMethod : "creditCard",
-            requestedTerms: requestedTerms? requestedTerms : null,
+            requestedTerms: requestedTerms? requestedTerms : "chargeOnDelivery",
             accountingEmail,
             isEmailValid: null,
             emailErrorText: null,
@@ -45,7 +44,6 @@ export default class UserPaymentInfo extends React.Component {
             creditCardExpiryMonthHelpText: null,
             creditCardExpiryYearHelpText: null,
             creditCardCVCHelpText: null,
-            isCreditCardVerified,
         }
         // bind states to func
         this.checkEmail = this.checkEmail.bind(this)
@@ -143,22 +141,87 @@ export default class UserPaymentInfo extends React.Component {
     }
     // if validated, sends all values to parent.
     submitPage() {
-        const {isEmailValid, isPasswordValid, isPasswordConfirmed} =  this.state
-        // these are the required fields that must be validated prior to continuing
-        if(isEmailValid && isPasswordValid && isPasswordConfirmed) {
-            const submittedValues = {
-                email: this.state.email,
-                password: this.state.password
+        console.log("submitting")
+        const { paymentMethod, requestedTerms, accountingEmail } = this.state
+        const { nextPage } = this.props
+        let submittedValues = {}
+        if (paymentMethod == "creditCard") {
+            const {creditCardName, creditCardNumber, creditCardExpiryMonth, creditCardExpiryYear, creditCardCVC,
+                isCreditCardNumberValid, isCreditCardExpiryValid, isCreditCardCVCValid} =  this.state
+            // // for (let key in this.state) {
+            // //     if (this.state[key] !== null && this.state[key] != ""){
+            // //         console.log("Have: " + key)
+            // //     } else {
+            // //         console.log("Missing: " + key)
+            // //     }
+            // // }
+            // console.log(creditCardName)
+            // console.log(creditCardNumber)
+            // console.log(creditCardExpiryMonth)
+            // console.log(creditCardExpiryYear)
+            // console.log(creditCardCVC)
+            // console.log(isCreditCardNumberValid)
+            // console.log(isCreditCardExpiryValid)
+            // console.log(isCreditCardCVCValid)
+            // console.log(requestedTerms)
+            // console.log(accountingEmail)
+            if(creditCardName &&
+                creditCardNumber && isCreditCardNumberValid &&
+                creditCardExpiryMonth && creditCardExpiryYear && isCreditCardExpiryValid &&
+                creditCardCVC && isCreditCardCVCValid &&
+                requestedTerms && accountingEmail) 
+                {
+                    submittedValues = {
+                        paymentMethod,
+                        requestedTerms,
+                        accountingEmail,
+                        creditCardName,
+                        creditCardNumber,
+                        creditCardExpiryMonth,
+                        creditCardExpiryYear,
+                        creditCardCVC,
+                    }
+                    console.log(submittedValues)
+                    nextPage(submittedValues)
+                }
+                else {
+                    // something missing or not valid, show submit error
+                    this.setState({ submitErrorMessage: true }, () => {
+                        setTimeout(() => {
+                          this.setState({ submitErrorMessage: false })
+                        }, 3000)
+                    })
+                }
+        } else if(paymentMethod == "EFT") {
+            const { financialInstituionName, bankBranchAddress, gMapsBankBranchAddress, bankAccountNumber, bankTransitNumber,
+            isBankAccountNumberValid, isBankTransitNumberValid, isBranchAddressValid } = this.state
+            if(financialInstituionName && 
+                bankBranchAddress && isBranchAddressValid && gMapsBankBranchAddress 
+                && bankAccountNumber && isBankAccountNumberValid && 
+                bankTransitNumber && isBankTransitNumberValid &&
+                requestedTerms && accountingEmail){
+                // eft info options
+                submittedValues = {
+                    paymentMethod,
+                    requestedTerms,
+                    accountingEmail,
+                    financialInstituionName,
+                    bankBranchAddress,
+                    gMapsBankBranchAddress,
+                    bankAccountNumber,
+                    bankTransitNumber
+                }
+                console.log(submittedValues)
+                nextPage(submittedValues)
             }
-            // everything is good, flip the page
-            this.props.nextPage(submittedValues)
-        } else {
-            // something missing or not valid, show submit error
-            this.setState({ submitErrorMessage: true }, () => {
-                setTimeout(() => {
-                  this.setState({ submitErrorMessage: false })
-                }, 3000)
-            })
+            else {
+                // something missing or not valid, show submit error
+                this.setState({ submitErrorMessage: true }, () => {
+                    setTimeout(() => {
+                      this.setState({ submitErrorMessage: false })
+                    }, 3000)
+                })
+            }
         }
     }
 

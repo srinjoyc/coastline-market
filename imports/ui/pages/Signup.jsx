@@ -42,7 +42,8 @@ export default class Registration extends Component {
         // User Payment Info: if CC is selected
         creditCardNumber: null,
         creditCardName: null,
-        creditCardExpiry: null,
+        creditCardExpiryYear: null,
+        creditCardExpiryMonth: null,
         creditCardCVC: null,
         isCreditCardVerified: null,
 
@@ -57,6 +58,7 @@ export default class Registration extends Component {
   // saves data and moves to next page
   nextPage(submittedPageValues) {
     const { formData, currentPage } = this.state
+    console.log(submittedPageValues)
     // merge the submitted values into the state before moving forward
     this.setState({
       formData: merge(formData, submittedPageValues),
@@ -71,7 +73,7 @@ export default class Registration extends Component {
     this.setState({
       formData: merge(formData, submittedPageValues),
       currentPage: currentPage - 1
-    }, () => console.log(formData))
+    }, () => console.log("done"))
   }
 
   render() {
