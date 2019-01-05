@@ -5,8 +5,6 @@ import moment from 'moment';
 import 'rc-time-picker/assets/index.css';
 
 const timeFormat = 'h a';
-const defaultDeliveryStart = moment().hour(8)
-const defaultDeliveryEnd = moment().hour(17)
 
 export default class UserDeliveryInfo extends React.Component {
 
@@ -75,12 +73,12 @@ export default class UserDeliveryInfo extends React.Component {
         let submittedValues = {}
         for (let key in this.state) {
             if (this.state[key] !== null && this.state[key] != "")
-                if(key == "deliveriesFrom" && !isTimesValid)
+                if (key == "deliveriesFrom" && !isTimesValid)
                     continue
-                if(key == "deliveriesTo" && !isTimesValid)
-                    continue
+            if (key == "deliveriesTo" && !isTimesValid)
+                continue
 
-                submittedValues[key] = this.state[key]
+            submittedValues[key] = this.state[key]
         }
         console.log(submittedValues)
         this.props.prevPage(submittedValues)
