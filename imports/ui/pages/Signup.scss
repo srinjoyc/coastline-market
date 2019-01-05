@@ -12,6 +12,16 @@ $bold-font-weight: 600;
 $break-large: 768px;
 $break-small: 767px;
 
+/* centers all icons in their div if div is text aligned */
+[class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    width: 100%;
+}
+
+.primary-color {
+    color: $primary-blue-color;
+}
+
 // common across all sizes
 @mixin card-container {
     border-radius: 1.2rem !important;

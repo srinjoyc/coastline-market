@@ -16,6 +16,11 @@ export default class UserCompletedRegistration extends React.Component {
                 <div className="d-none d-md-block col-md-2 col-12"><i className="fas fa-4x fa-pencil-alt pencil-icon"></i></div>
                     <div className="col-md-8 col-12"><h4 className="card-title">All Done!</h4></div>
                 </div>
+                <div className="row text-center">
+                    <div className="col-md-4 offset-md-4 col-8 offset-2">
+                        <i className="ml-md-4 far fa-9x fa-sun primary-color"></i>
+                    </div>
+                </div>
                 <div className="row text-center mt-5 mb-5">
                     <div className="col-10 offset-1">
                         <h4 className="text-muted"> Thanks for signing up!</h4>
