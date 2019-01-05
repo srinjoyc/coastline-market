@@ -101,9 +101,6 @@ $break-small: 767px;
     .sales-rep-link {
         color: white !important;
     }
-    .card-title {
-        @include reg-card-title;
-    }
     // laptops & larger
     @media screen and (min-width: $break-large) {
         .form-group {
@@ -139,6 +136,9 @@ $break-small: 767px;
         }
         .btn-cols {
             padding: 0.5rem;
+        }
+        .text-muted {
+            font-size: 1rem;
         }
     }
 
