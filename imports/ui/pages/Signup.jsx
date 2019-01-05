@@ -13,7 +13,7 @@ export default class Registration extends Component {
     super(props);
     // all the fields needed to create a new user
     this.state = {
-      currentPage: 5,
+      currentPage: 6,
       completed: false,
       userId: null,
       formData: {
@@ -115,27 +115,27 @@ export default class Registration extends Component {
     const { currentPage, formData } = this.state
     console.log(formData)
     return (
-      <div className="container-fluid">
+      <div className="container-fluid registration-container">
         <div className="row">
-          <div className="col-md-6 offset-3">
-            <div className="card">
+          <div className="col-md-6 offset-md-3">
+            <div id="card-container" className="card">
               {currentPage === 1 &&
-                <UserReg formData={formData} nextPage={this.nextPage} />
+                <UserReg currentPage={currentPage} formData={formData} nextPage={this.nextPage} />
               }
               {currentPage === 2 &&
-                <UserInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
+                <UserInfo currentPage={currentPage} formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
               {currentPage === 3 &&
-                <UserDeliveryInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
+                <UserDeliveryInfo currentPage={currentPage} formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
               {currentPage === 4 &&
-                <UserPaymentInfo formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
+                <UserPaymentInfo currentPage={currentPage} formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
               {currentPage === 5 &&
-                <UserInvites formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
+                <UserInvites currentPage={currentPage} formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
               }
               {currentPage === 6 &&
-                <UserCompletedRegistration formData={formData} />
+                <UserCompletedRegistration currentPage={currentPage} formData={formData} />
               }
             </div>
           </div>

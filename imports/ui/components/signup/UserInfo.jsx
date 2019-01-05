@@ -200,8 +200,11 @@ export default class UserInfo extends React.Component {
         const { name, role, restaurantName, restaurantType, phoneNumber, companyAddress, gMapsCompanyAddress, 
             phoneNumberHelpText, isValidPhoneNumber, companyAddressHelpText, isCompanyAddressValid } = this.state
         return (
-            <div className="card-body">
-                <h4 className="card-title">About You</h4>
+            <div className="card-body registration-card">
+                <div className="row mb-md-5">
+                    <div className="d-none d-md-block col-md-2 col-12"><i className="fas fa-4x fa-pencil-alt pencil-icon"></i></div>
+                    <div className="col-md-8 col-12"><h4 className="card-title">About You </h4></div>
+                </div>
                 {this.state.submitErrorMessage ? this.displaySubmitError() : null}
                 <div className="form-group row">
                     <div className="col-sm-6 col-12">
@@ -241,12 +244,18 @@ export default class UserInfo extends React.Component {
                     </div>
                     <div className="col-12">
                         <label>Company Address {isCompanyAddressValid ? <span className="badge badge-success">Success</span> : null} </label><br/>
-                        <small> Must select an address from the list. </small>
+                        <small className="text-primary"> Must select an address from the list. </small>
                         {this.renderGmapAutocomplete()}
                     </div>
                 </div>
-                <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Next !! </button>
-                <button onClick={this.goBack} type="button" className="btn btn-primary btn-lg btn-block"> Prev !! </button>
+                <div className="row mt-5">
+                    <div className="col-md-6 col-12 btn-cols text-center">
+                        <button onClick={this.goBack} type="button" className="btn btn-primary btn-lg btn-block prev-btn"> PREVIOUS </button>
+                    </div>
+                    <div className="col-md-6 col-12 btn-cols text-center">
+                        <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> {this.props.currentPage} of 5 </button>
+                    </div>
+                </div>
             </div>
         );
     }

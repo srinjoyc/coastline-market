@@ -134,25 +134,32 @@ export default class UserReg extends React.Component {
     render() {
         const { email, password, confirmPassword, isEmailValid, isPasswordValid, isPasswordConfirmed, submitErrorMessage, emailErrorText, confirmPasswordHelpText, passwordHelpText } = this.state
         return (
-            <div className="card-body">
-                <h4 className="card-title">Registration</h4>
+            <div className="card-body registration-card">
+                <div className="row mb-md-5">
+                    <div className="d-none d-md-block col-md-2 col-12"><i className="fas fa-4x fa-pencil-alt pencil-icon"></i></div>
+                    <div className="col-md-8 col-12"><h4 className="card-title">Registration</h4></div>
+                </div>
                 {submitErrorMessage ? this.displaySubmitError() : null}
                 <div className="form-group">
                     <label>Email {isEmailValid ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input defaultValue={email} onChange={(event) => this.setState({ email: event.target.value })} onBlur={this.checkEmail} type="text" name="" id="" className="form-control" placeholder="Your Email" />
+                    <input defaultValue={email} onChange={(event) => this.setState({ email: event.target.value })} onBlur={this.checkEmail} type="text" name="" id="" className="form-control" />
                     <small> {emailErrorText ? emailErrorText : null} </small>
                 </div>
                 <div className="form-group">
                     <label>Password {isPasswordValid ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input defaultValue={password} onChange={(event) => this.setState({ password: event.target.value })} onBlur={this.checkPassword} type="text" name="" id="" className="form-control" placeholder="Your Password" />
+                    <input defaultValue={password} onChange={(event) => this.setState({ password: event.target.value })} onBlur={this.checkPassword} type="text" name="" id="" className="form-control" />
                     <small> {passwordHelpText ? passwordHelpText : null} </small>
                 </div>
                 <div className="form-group">
                     <label>Confirm Password {isPasswordConfirmed ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input defaultValue={password} onChange={(event) => this.setState({ confirmPassword: event.target.value })} onBlur={this.checkConfirmPassword} type="text" name="" id="" className="form-control" placeholder="Your Email" />
+                    <input defaultValue={password} onChange={(event) => this.setState({ confirmPassword: event.target.value })} onBlur={this.checkConfirmPassword} type="text" name="" id="" className="form-control" />
                     <small> {confirmPasswordHelpText ? confirmPasswordHelpText : null} </small>
                 </div>
-                <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Click Me !! </button>
+                <div className="row mt-5">
+                    <div className="col-md-6 offset-md-6 col-12 text-center">
+                        <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> {this.props.currentPage} of 5 </button>
+                    </div>
+                </div>
             </div>
         );
     }

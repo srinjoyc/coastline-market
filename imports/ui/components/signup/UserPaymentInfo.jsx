@@ -15,7 +15,7 @@ export default class UserPaymentInfo extends React.Component {
             creditCardNumber, creditCardName, creditCardExpiryMonth, creditCardExpiryYear, creditCardCVC } = this.props.formData
         this.state = {
             // basic info
-            paymentMethod: paymentMethod ? paymentMethod : "creditCard",
+            paymentMethod: paymentMethod ? paymentMethod : "EFT",
             requestedTerms: requestedTerms ? requestedTerms : "chargeOnDelivery",
             accountingEmail,
             isEmailValid: null,
@@ -261,9 +261,9 @@ export default class UserPaymentInfo extends React.Component {
         const { financialInstituionName, bankBranchAddress, bankAccountNumber, bankTransitNumber,
             isBranchAddressValid, isBankAccountNumberValid, isBankTransitNumberValid, accountNumberHelpText, transitNumberHelpText } = this.state
         return (
-            <div className="row mb-2">
+            <div className="form-group row mb-2">
                 <div className="col-12">
-                    <h4 className="card-title">EFT Credit Information</h4>
+                    <h6 className="text-muted font-weight-bold">EFT Credit Information</h6>
                     <label> Financial Institution Name {financialInstituionName ? <span className="badge badge-success">Success</span> : null} </label>
                     <div className="input-group">
                         <select defaultValue={financialInstituionName} onChange={(event) => this.setState({ financialInstituionName: event.target.value })} className="custom-select">
@@ -274,7 +274,7 @@ export default class UserPaymentInfo extends React.Component {
                 </div>
                 <div className="col-12">
                     <label> Branch Address {isBranchAddressValid ? <span className="badge badge-success">Success</span> : null} </label><br />
-                    <small> Must select an address from the list. </small>
+                    <small className="text-info"> Must select an address from the list. </small>
                     {this.renderGmapAutocomplete()}
                 </div>
                 <div className="col-6">
@@ -365,16 +365,16 @@ export default class UserPaymentInfo extends React.Component {
             isCreditCardNumberValid, isCreditCardExpiryValid, isCreditCardCVCValid, isCreditCardVerified,
             creditCardNumberHelpText, creditCardExpiryHelpText, creditCardCVCHelpText } = this.state
         return (
-            <div className="row mb-2">
-                <h4 className="card-title">Credit Card Information </h4>
+            <div className="form-group row mb-2">
                 <div className="col-12">
+                <h6 className="text-muted font-weight-bold">Credit Card Information </h6>
                     <label>Credit Card Number {isCreditCardNumberValid ? <span className="badge badge-success">Success</span> : null} </label>
                     <input defaultValue={creditCardNumber} onChange={(event) => this.setState({ creditCardNumber: event.target.value })} onBlur={this.checkCreditCardNumber} type="text" name="" id="" className="form-control" placeholder="5500-0000-0000-0004" />
                     <small> {creditCardNumberHelpText ? creditCardNumberHelpText : null} </small>
                 </div>
                 <div className="col-12">
                     <label>Name on Credit Card {creditCardName ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input defaultValue={creditCardName} onBlur={(event) => this.setState({ creditCardName: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Your Name" />
+                    <input defaultValue={creditCardName} onBlur={(event) => this.setState({ creditCardName: event.target.value })} type="text" name="" id="" className="form-control" placeholder="Invoicing Email" />
                 </div>
                 <div className="col-4">
                     <label>Expiry Month {isCreditCardExpiryValid ? <span className="badge badge-success">Success</span> : null} </label>
@@ -413,8 +413,11 @@ export default class UserPaymentInfo extends React.Component {
     render() {
         const { paymentMethod, requestedTerms, isEmailValid, accountingEmail } = this.state
         return (
-            <div className="card-body">
-                <h4 className="card-title">Accounting Setup</h4>
+            <div className="card-body registration-card">
+                 <div className="row mb-md-5">
+                    <div className="d-none d-md-block col-md-2 col-12"><i className="fas fa-4x fa-pencil-alt pencil-icon"></i></div>
+                    <div className="col-md-8 col-12"><h4 className="card-title">Accounting Setup </h4></div>
+                </div>
                 {this.state.submitErrorMessage ? this.displaySubmitError() : null}
                 <div className="form-group row">
                     <div className="col-sm-6 col-12">
@@ -444,15 +447,21 @@ export default class UserPaymentInfo extends React.Component {
                 </div>
                 {paymentMethod == "EFT" ? this.displayEFTInfo() : this.displayCreditCardInfo()}
                 <div className="col-12 my-5">
-                    <small className="my-5">
+                    <p className="legal-text my-5">
                         Completing the above form serves as a digital signature, representing the account holder. You, the Payor, authorize COASTLINE MARKETING INC.
                         to debit the bank account identified above, for the value of the services you have purchased. You, the Payor, may revoke your authorization,
                         at any time, subject to providing notice of 30 days. To obtain a sample cancellation form, or for more information on your right to cancel a
                         PAD Agreement, contact your financial institution or visit www.cdnpay.ca.
-                    </small>
+                    </p>
                 </div>
-                <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> Next !! </button>
-                <button onClick={this.goBack} type="button" className="btn btn-primary btn-lg btn-block"> Prev !! </button>
+                <div className="row mt-5">
+                    <div className="col-md-6 col-12 btn-cols text-center">
+                        <button onClick={this.goBack} type="button" className="btn btn-primary btn-lg btn-block prev-btn"> PREVIOUS </button>
+                    </div>
+                    <div className="col-md-6 col-12 btn-cols text-center">
+                        <button onClick={this.submitPage} type="button" className="btn btn-primary btn-lg btn-block"> {this.props.currentPage} of 5 </button>
+                    </div>
+                </div>
             </div>
         );
     }

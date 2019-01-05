@@ -27,9 +27,9 @@ export default class Registration extends Component {
     const { users } = this.state
     console.log(users)
     return users.map((user) => (
-        <div className="col-12">
+        <div key={user.emails[0].address} className="col-12">
             <h1>{user.emails[0].address}</h1>
-            <pre key={user.emails[0]} className="border-primary">{JSON.stringify(user, null, 4)}</pre>
+            <pre className="border-primary">{JSON.stringify(user, null, 4)}</pre>
         </div>
     ));
   }

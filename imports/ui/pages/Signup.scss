@@ -1,0 +1,160 @@
+// colors
+$primary-blue-color: #3267ff;
+$secondary-blue-color: #668dff;
+$input-border-color: #d8d8d8;
+
+$primary-font: 'Lato', sans-serif;
+$heading-font-size: 3rem;
+$label-font-size: 1rem;
+$bold-font-weight: 600;
+
+
+$break-large: 768px;
+$break-small: 767px;
+
+// common across all sizes
+@mixin card-container {
+    border-radius: 1.2rem !important;
+    box-shadow: 0px 10px 25px -2px grey !important;
+}
+@mixin input-label-font {
+    font-family: $primary-font;
+    color: $secondary-blue-color;
+    text-transform: uppercase;
+}
+
+@mixin reg-card-title {
+    font-family: $primary-font;
+    color: $primary-blue-color;
+    text-align: center;
+    font-weight: $bold-font-weight;
+}
+
+@mixin rounded-button {
+    border-radius: 2rem;
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+@mixin bottom-border-input {
+    border-bottom: 1px solid $input-border-color;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    border-radius: 0;
+}
+
+// encapsulates all of the user reg componenets
+.registration-container {
+    #card-container {
+        @include card-container;
+    }
+}
+// scope the top level element so bootstrap elements can be safely overwritten
+.registration-card {
+    // common
+    .form-group {
+        .col-sm-6 {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        label {
+            @include input-label-font;
+            font-size: $label-font-size;
+        }
+        input {
+            @include bottom-border-input;
+            margin-bottom: 0.5em;
+        }
+        small{
+            color: red;
+        }
+        .badge{
+            margin-bottom: 1rem;
+            margin-left: 0.2rem;
+        }
+        select {
+            @include bottom-border-input;
+        }
+    }
+    .prev-btn {
+        @include rounded-button;
+        background-color: #fff !important;
+        color: $secondary-blue-color;
+        border: 2px solid $secondary-blue-color;
+    }
+    .btn-block {
+        @include rounded-button;
+        background-color: $secondary-blue-color;
+        border-color: $secondary-blue-color;
+    }
+    .btn-block:hover {
+        background-color: #3367ff;
+    }
+    .prev-btn:hover {
+        background-color: #eef2ff !important;
+    }
+    .legal-text {
+        font-size: 0.5rem;
+    }
+    .sales-rep-link {
+        color: white !important;
+    }
+    .card-title {
+        @include reg-card-title;
+    }
+    // laptops & larger
+    @media screen and (min-width: $break-large) {
+        .form-group {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        .card-body {
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-bottom: 3rem;
+            padding-top: 1rem;
+            border-radius: 2rem !important;
+        }
+        .card-title {
+            @include reg-card-title;
+            font-size: $heading-font-size;
+        }
+        .pencil-icon {
+            color: $primary-blue-color;
+            float: left !important;
+        }
+        .form-group {
+            .badge{
+                margin-bottom: 1rem;
+                margin-left: 0.2rem;
+            }
+        }
+    }
+    // ipads & smaller
+    @media screen and (max-width: $break-large) {
+        .card-title {
+            @include reg-card-title;
+        }
+        .btn-cols {
+            padding: 0.5rem;
+        }
+    }
+
+}
+
+
+$break-small: 320px;
+
+.profile-pic {
+  float: left;
+  width: 250px;
+  @media screen and (max-width: 320px) {
+    width: 100px;
+    float: none;
+  }
+  @media screen and (min-width: $break-large) {
+    float: right;
+  }
+}
