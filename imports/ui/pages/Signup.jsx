@@ -5,6 +5,7 @@ import UserInfo from '../components/signup/UserInfo';
 import UserDeliveryInfo from '../components/signup/UserDeliveryInfo';
 import UserPaymentInfo from '../components/signup/UserPaymentInfo';
 import UserInvites from '../components/signup/UserInvites';
+import UserCompletedRegistration from '../components/signup/UserCompletedRegistration';
 
 export default class Registration extends Component {
 
@@ -12,7 +13,9 @@ export default class Registration extends Component {
     super(props);
     // all the fields needed to create a new user
     this.state = {
-      currentPage: 4,
+      currentPage: 5,
+      completed: false,
+      userId: null,
       formData: {
         // User Reg
         email: null,
@@ -45,8 +48,8 @@ export default class Registration extends Component {
         creditCardExpiryYear: null,
         creditCardExpiryMonth: null,
         creditCardCVC: null,
-        isCreditCardVerified: null,
-
+        completed: false,
+        emailed: false,
         inviteEmails: [],
       }
     }
@@ -58,12 +61,44 @@ export default class Registration extends Component {
   // saves data and moves to next page
   nextPage(submittedPageValues) {
     const { formData, currentPage } = this.state
+    let createdUserId;
     console.log(submittedPageValues)
     // merge the submitted values into the state before moving forward
     this.setState({
       formData: merge(formData, submittedPageValues),
       currentPage: currentPage + 1
-    }, () => console.log(formData))
+    }, () => {
+      console.log(currentPage)
+      console.log(formData)
+      if (currentPage == 4) {
+        Meteor.call('user.submitRegistrationData', formData, (err, userId) => {
+          if(err) {
+            console.log(err)
+          }
+          if(userId) {
+            console.log(userId)
+            this.setState({
+              formData: merge(formData, { completed: true, userId }),
+            })
+          }
+        })
+      }
+      if (currentPage == 5) {
+        console.log("sending inivte emails...")
+        console.log(formData.userId)
+        Meteor.call('user.sendInviteEmails', formData.inviteEmails, formData.userId, (err, resp) => {
+          if(err) {
+            console.log(err)
+          }
+          if(resp) {
+            console.log("sent!!!! inivte emails...")
+            this.setState({
+              formData: merge(formData, { emailed: true }),
+            })
+          }
+        })
+      }
+    })
   }
 
   // saves any filled values on current page and moves to previous page
@@ -77,9 +112,8 @@ export default class Registration extends Component {
   }
 
   render() {
-    const { currentPage } = this.state
-    const { formData } = this.state
-
+    const { currentPage, formData } = this.state
+    console.log(formData)
     return (
       <div className="container-fluid">
         <div className="row">
@@ -99,6 +133,9 @@ export default class Registration extends Component {
               }
               {currentPage === 5 &&
                 <UserInvites formData={formData} prevPage={this.prevPage} nextPage={this.nextPage} />
+              }
+              {currentPage === 6 &&
+                <UserCompletedRegistration formData={formData} />
               }
             </div>
           </div>

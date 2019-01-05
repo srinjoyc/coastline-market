@@ -1,3 +1,8 @@
+import { Customers } from '../collections/Customer.js'
+import { Meteor } from 'meteor/meteor'
+import { Accounts } from "meteor/accounts-base"
+import { Email } from 'meteor/email'
+
 Meteor.methods({
 
   /**
@@ -34,5 +39,30 @@ Meteor.methods({
     } else {
       throw new Meteor.Error('Password', 'Password needs to be more than 8 characters long.');
     }
+  },
+  'user.submitRegistrationData'(formData) {
+    console.log(formData)
+    const { email, password } = formData
+    if (email && password){
+      delete formData.password
+      const userId = Accounts.createUser({ username: email, email, password, profile: formData })
+      console.log(userId)
+      return userId
+    } else {
+      throw new Meteor.Error('User Creation', 'Email or Password are incorrect.');
+    }
+  },
+  'user.sendInviteEmails'(inviteEmails, userId) {
+    Meteor.users.update({_id: userId}, {$set: {"profile.inviteEmails": inviteEmails }});
+    this.unblock();
+    if (inviteEmails.length > 0){
+      inviteEmails.forEach(email => {
+        Email.send({ to: email, from: "srinjoycal@gmail.com", subject: "hello", text: "this is a test" })
+      });
+    }
+    return true
+  },
+  'users.getUsers'() {
+    return Meteor.users.find({}).fetch()
   }
 })
