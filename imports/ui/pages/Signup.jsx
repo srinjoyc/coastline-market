@@ -13,7 +13,7 @@ export default class Registration extends Component {
     super(props);
     // all the fields needed to create a new user
     this.state = {
-      currentPage: 6,
+      currentPage: 1,
       completed: false,
       userId: null,
       formData: {
