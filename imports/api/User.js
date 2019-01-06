@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { Accounts } from "meteor/accounts-base"
 import { Email } from 'meteor/email'
 
+
 Meteor.methods({
 
   /**
@@ -19,6 +20,12 @@ Meteor.methods({
       if(email.match(pattern) == null) {
         throw new Meteor.Error('Email', 'Email is not valid.');
       } else {
+        // check if any other user has the same email
+        const emailAlreadyExist = Meteor.users.find({"emails.address": email }, {limit: 1}).count() > 0;
+        console.log(emailAlreadyExist)
+        if (emailAlreadyExist)
+          throw new Meteor.Error('Email', 'Email is already registered.');
+        // return true if userid was null and thus email is not taken.
         return true
       }
     }
