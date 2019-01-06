@@ -11,7 +11,6 @@ Meteor.methods({
    * @returns {Boolean} If the user's email is available or not.
    */
   'user.checkAvailableEmail'(email) {
-    console.log(email)
     if(email == undefined) {
       return false
     }
@@ -30,7 +29,6 @@ Meteor.methods({
    * @returns {Boolean} If password is valid or not.
    */
   'user.checkPassword'(password) {
-    console.log(password)
     if(password == undefined) {
       return false
     }
@@ -40,18 +38,27 @@ Meteor.methods({
       throw new Meteor.Error('Password', 'Password needs to be more than 8 characters long.');
     }
   },
+  /**
+   * @description Creates a new user acccount and associates the formdata to that account.
+   * @param {Object} formData - Check Signup.jsx for all values.
+   * @returns Error if problem, the userID if a new user was succesfully created.
+   */
   'user.submitRegistrationData'(formData) {
-    console.log(formData)
     const { email, password } = formData
     if (email && password){
       delete formData.password
       const userId = Accounts.createUser({ username: email, email, password, profile: formData })
-      console.log(userId)
       return userId
     } else {
       throw new Meteor.Error('User Creation', 'Email or Password are incorrect.');
     }
   },
+  /**
+   * @description Associates the invite emails to the user and emails them.
+   * @param {Array} inviteEmails - Any referral emails the user has typed in via an array.
+   * @param {String} userId - The id of the user to associate the invites to.
+   * @returns Error if problem, the userID if a new user was succesfully created.
+   */
   'user.sendInviteEmails'(inviteEmails, userId) {
     Meteor.users.update({_id: userId}, {$set: {"profile.inviteEmails": inviteEmails }});
     this.unblock();
@@ -62,6 +69,10 @@ Meteor.methods({
     }
     return true
   },
+  /**
+   * @description Gets all users in the db.
+   * @returns {[Objects]} - An array of user objects.
+   */
   'users.getUsers'() {
     return Meteor.users.find({}).fetch()
   }

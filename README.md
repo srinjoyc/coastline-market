@@ -10,7 +10,7 @@ https://regflowcoastline.herokuapp.com/
 
 https://github.com/srinjoyc/coastline-market/wiki/Key-Libraries
 
-https://github.com/srinjoyc/coastline-market/wiki/Registration-Componenets
+https://github.com/srinjoyc/coastline-market/wiki/Registration-Components
 
 
 ## Installation
