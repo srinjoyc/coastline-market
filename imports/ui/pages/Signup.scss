@@ -71,6 +71,8 @@ $break-small: 767px;
 }
 // scope the top level element so bootstrap elements can be safely overwritten
 .registration-card {
+    transition: width 2s;
+    transition-timing-function: linear;
     // common
     .form-group {
         .col-sm-6 {
