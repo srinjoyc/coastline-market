@@ -23,13 +23,13 @@ export default class UserCompletedRegistration extends React.Component {
                 </div>
                 <div className="row text-center mt-5 mb-5">
                     <div className="col-10 offset-1">
-                        <h4 className="text-muted"> Thanks for signing up!</h4>
-                        <h4 className="text-muted"> A dedicted rep will review the data and get back to you within 1 hour.</h4>
+                        <h4 className="text-muted primary-font"> Thanks for signing up!</h4>
+                        <h4 className="text-muted primary-font"> A dedicted rep will review the data and get back to you within 1 hour.</h4>
                     </div>
                 </div>
                 <div className="row mt-5">
                     <div className="col-12 btn-cols text-center">
-                        <button type="button" className="btn btn-primary btn-lg btn-block btn-link"> <a className="sales-rep-link" href={"mailto:sales@coastlinemarket.com"}> CONTACT SALES REP </a> </button>
+                        <button type="button" className="btn btn-primary btn-lg btn-block btn-link"> <a className="sales-rep-link primary-font" href={"mailto:sales@coastlinemarket.com"}> CONTACT SALES REP </a> </button>
                     </div>
                 </div>
             </div>

@@ -22,6 +22,9 @@ $break-small: 767px;
     color: $primary-blue-color;
 }
 
+.primary-font {
+    font-family: $primary-font;
+}
 // common across all sizes
 @mixin card-container {
     border-radius: 1.2rem !important;
