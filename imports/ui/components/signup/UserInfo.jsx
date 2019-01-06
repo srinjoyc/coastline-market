@@ -12,9 +12,9 @@ export default class UserInfo extends React.Component {
         // !! is the boolean value (true if it exists)
         this.state = {
             name,
-            role,
+            role: role? role : "Head Chef",
             restaurantName,
-            restaurantType,
+            restaurantType: restaurantType? restaurantType : "One Location",
             phoneNumber,
             isValidPhoneNumber: !!phoneNumber,
             phoneNumberHelpText: null,

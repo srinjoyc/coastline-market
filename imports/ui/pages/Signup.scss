@@ -22,6 +22,11 @@ $break-small: 767px;
     color: $primary-blue-color;
 }
 
+.primary-background-color {
+    background-color: #fafafa;
+}
+
+
 .primary-font {
     font-family: $primary-font;
 }
@@ -107,6 +112,7 @@ $break-small: 767px;
     }
     .prev-btn:hover {
         background-color: #eef2ff !important;
+        color: $secondary-blue-color !important;
     }
     .legal-text {
         font-size: 0.5rem;

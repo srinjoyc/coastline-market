@@ -147,12 +147,12 @@ export default class UserReg extends React.Component {
                 </div>
                 <div className="form-group">
                     <label>Password {isPasswordValid ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input defaultValue={password} onChange={(event) => this.setState({ password: event.target.value })} onBlur={this.checkPassword} type="text" name="" id="" className="form-control" />
+                    <input defaultValue={password} onChange={(event) => this.setState({ password: event.target.value })} onBlur={this.checkPassword} type="password" name="" id="" className="form-control" />
                     <small> {passwordHelpText ? passwordHelpText : null} </small>
                 </div>
                 <div className="form-group">
                     <label>Confirm Password {isPasswordConfirmed ? <span className="badge badge-success">Success</span> : null} </label>
-                    <input defaultValue={password} onChange={(event) => this.setState({ confirmPassword: event.target.value })} onBlur={this.checkConfirmPassword} type="text" name="" id="" className="form-control" />
+                    <input defaultValue={password} onChange={(event) => this.setState({ confirmPassword: event.target.value })} onBlur={this.checkConfirmPassword} type="password" name="" id="" className="form-control" />
                     <small> {confirmPasswordHelpText ? confirmPasswordHelpText : null} </small>
                 </div>
                 <div className="row mt-5">

@@ -1,32 +1,23 @@
 # Coastline Market Registration | React + Meteor
-#### APIs & Packages
-- [Session](https://docs.meteor.com/api/session.html)
-- [Logging](https://atmospherejs.com/meteor/logging)
-- [Reload](https://atmospherejs.com/meteor/reload)
-- [Random](https://docs.meteor.com/packages/random.html)
-- [EJSON](https://docs.meteor.com/api/ejson.html)
-- [Spacebars](https://docs.meteor.com/packages/spacebars.html)
-- [Check](https://docs.meteor.com/api/check.html)
-- [Accounts Password](http://docs.meteor.com/api/passwords.html)
-- [Accounts UI](https://docs.meteor.com/packages/accounts-ui.html) (with React wrapper)
-- [gadicc:blaze-react-component](https://github.com/gadicc/meteor-blaze-react-component/)
+##Live URL
+https://regflowcoastline.herokuapp.com/
 
-#### NPM
-- React
-- React DOM
-- [React Router](https://github.com/reactjs/react-router)
-- [Classnames](https://github.com/JedWatson/classnames)
-- [History](https://github.com/ReactTraining/history)
+##Basic Docs
+https://github.com/srinjoyc/coastline-market/wiki/Key-Libraries
+https://github.com/srinjoyc/coastline-market/wiki/Registration-Componenets
 
-#### Components
-- Header
-- LoginButtons
+## Installation
+**Only for MacOS**
+*`curl https://install.meteor.com/ | sh`
+*cd into local repository
+*meteor npm install
+*meteor
+***For the mailer to work, MAIL_URL must be exported***
+
 
 #### Models
-- User
-- (See a more [complex example](https://github.com/AdamBrodzinski/react-ive-meteor/blob/master/both/models/post.js))
+- User with filled in form data stored in their profile field (see wiki)
 
 #### Pages/Routes
-- Home, About
-- Not Found
-- Main Layout
+- '/' home -> start registration flow
+- '/users-list' -> shows json dump of users in db.

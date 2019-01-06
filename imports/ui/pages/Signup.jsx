@@ -13,7 +13,7 @@ export default class Registration extends Component {
     super(props);
     // all the fields needed to create a new user
     this.state = {
-      currentPage: 6,
+      currentPage: 1,
       completed: false,
       userId: null,
       formData: {
@@ -115,7 +115,7 @@ export default class Registration extends Component {
     const { currentPage, formData } = this.state
     console.log(formData)
     return (
-      <div className="container-fluid registration-container">
+      <div className="container-fluid registration-container primary-background-color">
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <div id="card-container" className="card">
