@@ -162,18 +162,3 @@ $break-small: 767px;
     }
 
 }
-
-
-$break-small: 320px;
-
-.profile-pic {
-  float: left;
-  width: 250px;
-  @media screen and (max-width: 320px) {
-    width: 100px;
-    float: none;
-  }
-  @media screen and (min-width: $break-large) {
-    float: right;
-  }
-}

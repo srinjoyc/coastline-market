@@ -101,8 +101,8 @@ export default class UserPaymentInfo extends React.Component {
                                     const className = suggestion.active ? 'suggestion-item-active' : 'suggestion-item';
                                     // inline style for demonstration purpose
                                     const style = suggestion.active
-                                        ? { backgroundColor: '#00A0DC', cursor: 'pointer' }
-                                        : { backgroundColor: '#86888A', cursor: 'pointer' };
+                                        ? { backgroundColor: '#ffffff', cursor: 'pointer' }
+                                        : { backgroundColor: '#fafafa', cursor: 'pointer' };
                                     return (
                                         <div {...getSuggestionItemProps(suggestion, { className, style })}>
                                             <span>{suggestion.description}</span>
