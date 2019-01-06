@@ -61,22 +61,17 @@ export default class Registration extends Component {
   // saves data and moves to next page
   nextPage(submittedPageValues) {
     const { formData, currentPage } = this.state
-    let createdUserId;
-    console.log(submittedPageValues)
     // merge the submitted values into the state before moving forward
     this.setState({
       formData: merge(formData, submittedPageValues),
       currentPage: currentPage + 1
     }, () => {
-      console.log(currentPage)
-      console.log(formData)
       if (currentPage == 4) {
         Meteor.call('user.submitRegistrationData', formData, (err, userId) => {
           if(err) {
             console.log(err)
           }
           if(userId) {
-            console.log(userId)
             this.setState({
               formData: merge(formData, { completed: true, userId }),
             })
@@ -84,14 +79,11 @@ export default class Registration extends Component {
         })
       }
       if (currentPage == 5) {
-        console.log("sending inivte emails...")
-        console.log(formData.userId)
         Meteor.call('user.sendInviteEmails', formData.inviteEmails, formData.userId, (err, resp) => {
           if(err) {
             console.log(err)
           }
           if(resp) {
-            console.log("sent!!!! inivte emails...")
             this.setState({
               formData: merge(formData, { emailed: true }),
             })
@@ -108,12 +100,11 @@ export default class Registration extends Component {
     this.setState({
       formData: merge(formData, submittedPageValues),
       currentPage: currentPage - 1
-    }, () => console.log("done"))
+    })
   }
 
   render() {
     const { currentPage, formData } = this.state
-    console.log(formData)
     return (
       <div className="container-fluid registration-container primary-background-color">
         <div className="row">

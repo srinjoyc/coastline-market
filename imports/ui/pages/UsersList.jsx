@@ -16,7 +16,6 @@ export default class Registration extends Component {
         if(err)
             console.log(err)
         if(users)
-            console.log(users)
             this.setState({
                 users,
             })
@@ -25,7 +24,6 @@ export default class Registration extends Component {
 
   displayUserList(){
     const { users } = this.state
-    console.log(users)
     return users.map((user) => (
         <div key={user.emails[0].address} className="col-12">
             <h4 className="text-muted">{user.emails[0].address}</h4>

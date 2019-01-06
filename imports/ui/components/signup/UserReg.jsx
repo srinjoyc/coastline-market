@@ -131,6 +131,8 @@ export default class UserReg extends React.Component {
         )
     }
 
+    
+
     render() {
         const { email, password, confirmPassword, isEmailValid, isPasswordValid, isPasswordConfirmed, submitErrorMessage, emailErrorText, confirmPasswordHelpText, passwordHelpText } = this.state
         return (

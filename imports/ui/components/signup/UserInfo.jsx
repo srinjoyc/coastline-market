@@ -7,7 +7,6 @@ export default class UserInfo extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props)
         const { name, role, restaurantName, restaurantType, phoneNumber, companyAddress, gMapsCompanyAddress } = this.props.formData
         // !! is the boolean value (true if it exists)
         this.state = {
@@ -22,7 +21,6 @@ export default class UserInfo extends React.Component {
             isCompanyAddressValid: !!companyAddress,
             gMapsCompanyAddress,
         }
-        console.log(this.state)
         // bind states to func
         this.submitPage = this.submitPage.bind(this)
         this.goBack = this.goBack.bind(this)
@@ -183,7 +181,6 @@ export default class UserInfo extends React.Component {
                 
                 submittedValues[key] = this.state[key]
         }
-        console.log(submittedValues)
         prevPage(submittedValues)
     }
 

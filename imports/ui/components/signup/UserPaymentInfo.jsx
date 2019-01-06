@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Logthis } from '../../../../lib/helpers/signup.js'
 import moment from 'moment';
 import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete'
 
@@ -9,7 +8,6 @@ export default class UserPaymentInfo extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(props)
         const { paymentMethod, requestedTerms, accountingEmail, financialInstituionName,
             bankBranchAddress, bankAccountNumber, bankTransitNumber, gMapsBankBranchAddress,
             creditCardNumber, creditCardName, creditCardExpiryMonth, creditCardExpiryYear, creditCardCVC } = this.props.formData
@@ -141,7 +139,6 @@ export default class UserPaymentInfo extends React.Component {
     }
     // if validated, sends all values to parent.
     submitPage() {
-        console.log("submitting")
         const { paymentMethod, requestedTerms, accountingEmail } = this.state
         const { nextPage } = this.props
         let submittedValues = {}
@@ -164,7 +161,6 @@ export default class UserPaymentInfo extends React.Component {
                     creditCardExpiryYear,
                     creditCardCVC,
                 }
-                console.log(submittedValues)
                 nextPage(submittedValues)
             }
             else {
@@ -194,7 +190,6 @@ export default class UserPaymentInfo extends React.Component {
                     bankAccountNumber,
                     bankTransitNumber
                 }
-                console.log(submittedValues)
                 nextPage(submittedValues)
             }
             else {
@@ -214,7 +209,6 @@ export default class UserPaymentInfo extends React.Component {
             if (this.state[key] !== null && this.state[key] != "")
                 submittedValues[key] = this.state[key]
         }
-        console.log(submittedValues)
         this.props.prevPage(submittedValues)
     }
 

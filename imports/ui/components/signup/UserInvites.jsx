@@ -6,9 +6,7 @@ export default class UserInvites extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props)
         const { inviteEmails } = this.props.formData
-        console.log(inviteEmails)
         const email1 = inviteEmails.length >= 1? inviteEmails[0] : null
         const email2 = inviteEmails.length >= 2? inviteEmails[1] : null
         const email3 = inviteEmails.length >= 3? inviteEmails[2] : null
@@ -123,7 +121,6 @@ export default class UserInvites extends React.Component {
                 if(key == "email3" && isEmail3Valid)
                     inviteEmails.push(email3)
         }
-        console.log(inviteEmails)
         prevPage({ inviteEmails })
     }
     render() {

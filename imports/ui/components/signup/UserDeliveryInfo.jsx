@@ -10,7 +10,6 @@ export default class UserDeliveryInfo extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props)
         const { deliveriesFrom, deliveriesTo, specialInstructions } = this.props.formData
         this.state = {
             deliveriesFrom: deliveriesFrom ? deliveriesFrom : 8,
@@ -32,7 +31,6 @@ export default class UserDeliveryInfo extends React.Component {
             // email did not pass regex or is empty or already registered
             if (err) {
                 // display err msg
-                console.log(err)
                 this.setState({ passwordHelpText: err.reason, isPasswordValid: false })
             } else if (resp) {
                 // email is good, remove err msg & display success
@@ -80,7 +78,6 @@ export default class UserDeliveryInfo extends React.Component {
 
             submittedValues[key] = this.state[key]
         }
-        console.log(submittedValues)
         this.props.prevPage(submittedValues)
     }
 
@@ -97,23 +94,19 @@ export default class UserDeliveryInfo extends React.Component {
         const deliveryHour = value.hour()
         this.setState({ deliveriesFrom: value ? value.hour() : now.format(timeFormat) })
         if (deliveryHour < this.state.deliveriesTo) {
-            console.log("corrected 1")
             this.setState({ isTimesValid: true })
         } else {
             this.setState({ invalidTimeHelpText: "Delivery From time must be earlier than the Delivery To time.", isTimesValid: false })
         }
-        console.log(value && value.format('h a'));
     }
     onDeliveryToTimeChange(value) {
         const deliveryHour = value.hour()
         this.setState({ deliveriesTo: value ? value.hour() : now.format(timeFormat) })
         if (deliveryHour > this.state.deliveriesFrom) {
-            console.log("corrected 2")
             this.setState({ isTimesValid: true })
         } else {
             this.setState({ invalidTimeHelpText: "Delivery From time must be earlier than the Delivery To time.", isTimesValid: false })
         }
-        console.log(value && value.format('h a'));
     }
     render() {
         return (
@@ -133,7 +126,6 @@ export default class UserDeliveryInfo extends React.Component {
                                 allowEmpty={false}
                                 className="xxx"
                                 onChange={(value) => this.onDeliveryFromTimeChange(value)}
-                                onAmPmChange={(value) => console.log(value)}
                                 showMinute={false}
                                 format={timeFormat}
                                 use12Hours
