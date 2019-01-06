@@ -1,7 +1,15 @@
-import { Customers } from '../collections/Customer.js'
-import { Meteor } from 'meteor/meteor'
-import { Accounts } from "meteor/accounts-base"
-import { Email } from 'meteor/email'
+import {
+  Customers
+} from '../collections/Customer.js'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  Accounts
+} from "meteor/accounts-base"
+import {
+  Email
+} from 'meteor/email'
 
 
 Meteor.methods({
@@ -12,16 +20,20 @@ Meteor.methods({
    * @returns {Boolean} If the user's email is available or not.
    */
   'user.checkAvailableEmail'(email) {
-    if(email == undefined) {
+    if (email == undefined) {
       return false
     }
-    if(!!email.length) {
+    if (!!email.length) {
       var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/
-      if(email.match(pattern) == null) {
+      if (email.match(pattern) == null) {
         throw new Meteor.Error('Email', 'Email is not valid.');
       } else {
         // check if any other user has the same email
-        const emailAlreadyExist = Meteor.users.find({"emails.address": email }, {limit: 1}).count() > 0;
+        const emailAlreadyExist = Meteor.users.find({
+          "emails.address": email
+        }, {
+          limit: 1
+        }).count() > 0;
         console.log(emailAlreadyExist)
         if (emailAlreadyExist)
           throw new Meteor.Error('Email', 'Email is already registered.');
@@ -36,10 +48,10 @@ Meteor.methods({
    * @returns {Boolean} If password is valid or not.
    */
   'user.checkPassword'(password) {
-    if(password == undefined) {
+    if (password == undefined) {
       return false
     }
-    if(password.length >= 8) {
+    if (password.length >= 8) {
       return true
     } else {
       throw new Meteor.Error('Password', 'Password needs to be more than 8 characters long.');
@@ -51,10 +63,18 @@ Meteor.methods({
    * @returns Error if problem, the userID if a new user was succesfully created.
    */
   'user.submitRegistrationData'(formData) {
-    const { email, password } = formData
-    if (email && password){
+    const {
+      email,
+      password
+    } = formData
+    if (email && password) {
       delete formData.password
-      const userId = Accounts.createUser({ username: email, email, password, profile: formData })
+      const userId = Accounts.createUser({
+        username: email,
+        email,
+        password,
+        profile: formData
+      })
       return userId
     } else {
       throw new Meteor.Error('User Creation', 'Email or Password are incorrect.');
@@ -67,11 +87,22 @@ Meteor.methods({
    * @returns Error if problem, the userID if a new user was succesfully created.
    */
   'user.sendInviteEmails'(inviteEmails, userId) {
-    Meteor.users.update({_id: userId}, {$set: {"profile.inviteEmails": inviteEmails }});
+    Meteor.users.update({
+      _id: userId
+    }, {
+      $set: {
+        "profile.inviteEmails": inviteEmails
+      }
+    });
     this.unblock();
-    if (inviteEmails.length > 0){
+    if (inviteEmails.length > 0) {
       inviteEmails.forEach(email => {
-        Email.send({ to: email, from: "srinjoycal@gmail.com", subject: "hello", text: "this is a test" })
+        Email.send({
+          to: email,
+          from: "srinjoycal@gmail.com",
+          subject: "hello",
+          text: "this is a test"
+        })
       });
     }
     return true
