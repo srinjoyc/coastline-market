@@ -31,3 +31,5 @@ accounts-ui
 accounts-password
 gadicc:blaze-react-component
 fourseven:scss
+monbro:mongodb-mapreduce-aggregation
+meteorhacks:aggregate

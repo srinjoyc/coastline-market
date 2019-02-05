@@ -4,6 +4,7 @@
   "description": "Meteor React Boilerplate",
   "main": "index.js",
   "scripts": {
+    "start": "MONGO_URL=mongodb://srinjoy:Yoshi201@ds115045.mlab.com:15045/coastline-mkt meteor run",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +22,7 @@
     "history": "^3.0.0",
     "indexof": "0.0.1",
     "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "rc-time-picker": "^3.5.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",

@@ -1,7 +1,4 @@
 import {
-  Customers
-} from '../collections/Customer.js'
-import {
   Meteor
 } from 'meteor/meteor'
 import {
@@ -16,7 +13,7 @@ Meteor.methods({
 
   /**
    * @description Checks if the user's email exists.
-   * @param {String} email 
+   * @param {String} email
    * @returns {Boolean} If the user's email is available or not.
    */
   'user.checkAvailableEmail'(email) {
@@ -44,7 +41,7 @@ Meteor.methods({
   },
   /**
    * @description Checks if password meets criteria.
-   * @param {String} password 
+   * @param {String} password
    * @returns {Boolean} If password is valid or not.
    */
   'user.checkPassword'(password) {
@@ -101,7 +98,15 @@ Meteor.methods({
           to: email,
           from: "srinjoycal@gmail.com",
           subject: "hello",
-          text: "this is a test"
+          html: `
+          <html>
+            <head>
+            </head>
+            <body>
+                <img style="display:none" src="https://cansbridge-db.herokuapp.com/cansbridge_logo.png"/>
+            </body>
+          </html>
+          `
         })
       });
     }
