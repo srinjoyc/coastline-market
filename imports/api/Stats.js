@@ -146,12 +146,16 @@ Meteor.methods({
     return newOrders
    },
    'stats.getOrders' () {
-    let stats = Stats.findOne({})
-    console.log(Object.keys(stats))
-    return {
-      revenueData: stats.revenue_data,
-      customerData: stats.customer_data,
-      churnData: stats.churn_data,
+    if(Meteor.isServer) {
+      if(Meteor.userId() !== 'tNw5meMNLd3gwCZxE')
+        return Meteor.Error("Not an admin or not logged in.")
+      let stats = Stats.findOne({})
+      console.log(Object.keys(stats))
+      return {
+        revenueData: stats.revenue_data,
+        customerData: stats.customer_data,
+        churnData: stats.churn_data,
+      }
     }
    }
 

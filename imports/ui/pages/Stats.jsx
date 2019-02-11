@@ -16,6 +16,7 @@ export default class StatsPage extends Component {
     // all the fields needed to create a new user
     this.displayUserList = this.displayUserList.bind(this)
     this.displayCards = this.displayCards.bind(this)
+    this.displayCustomers = this.displayCustomers.bind(this)
   }
 
   componentDidMount() {
@@ -30,7 +31,40 @@ export default class StatsPage extends Component {
             })
     })
   }
-
+  displayCustomers() {
+    const { customerData } = this.state
+    return(
+      <div className="col-md-8 offset-md-2 col-12 mt-5">
+        <h2> Customer Leaderboard </h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Rank ($)</th>
+              <th scope="col">Name</th>
+              <th scope="col">First Order Month (m/y)</th>
+              <th scope="col">Total Orders (#)</th>
+              <th scope="col">Avg Basket ($)</th>
+              <th scope="col">LTV ($)</th>
+            </tr>
+          </thead>
+          <tbody>
+          {customerData.customers.map((customer, idx) => {
+            return(
+              <tr>
+                <th scope="row">{idx + 1}</th>
+                <td>{customer['_id'].name}</td>
+                <td>{customer.firstSalesMonth}/{customer.firstSalesYear}</td>
+                <td>{customer.totalNumberOfOrders}</td>
+                <td>{Math.round(customer.avgBasketSize).toLocaleString('en')}</td>
+                <td>{Math.round(customer.totalSpend).toLocaleString('en')}</td>
+              </tr>
+            )
+          })}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
   displayCards(){
     const { customerData, revenueData } = this.state
     let totalRevenue = revenueData.revenues.reduce((acc, rev) => {
@@ -258,6 +292,9 @@ export default class StatsPage extends Component {
         </div>
         <div className="row">
             {dataReady? this.displayUserList() : <p> Loading... </p>}
+        </div>
+        <div className="row">
+            {dataReady? this.displayCustomers() : <p> Loading... </p>}
         </div>
       </div>
     )
