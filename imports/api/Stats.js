@@ -1,9 +1,12 @@
 import {
-  formattedOrders
+  FormattedOrders
 } from '../collections/FormattedOrders.js'
 import {
   Orders
 } from '../collections/Orders.js'
+import {
+  Stats
+} from '../collections/Stats.js'
 import {
   Meteor
 } from 'meteor/meteor'
@@ -63,52 +66,50 @@ const getFormattedDate = (deliveryDate) => {
   if(isNaN(month)){
     month = moment(deliveryDate, "dddd, MMMM Do, YYYY").month()
   }
-  return month
+  return {
+    day: moment(deliveryDate, "dddd, MMMM Do, YYYY").day(),
+    month,
+    year: moment(deliveryDate, "dddd, MMMM Do, YYYY").year()
+  }
 }
 const getFormattedOrder = (order) => {
   let newOrders = []
   let { deliveryDate } = order
-  let month = moment(deliveryDate, "dddd, MMMM Do, YYYY").month()
+  let newDate = {}
+    //TODO: go through all recurring orders.
+  // is object = Tuesday, October 24th, 2017
+  if(Array.isArray(deliveryDate)){
+    count2 += 1
+    const firstDateInOrder = deliveryDate[0].deliveryDate
+    newDate = getFormattedDate(firstDateInOrder)
+    newOrders.push({newDate, ...order })
+    console.log("array")
+    return newOrders
+  }
+  if(typeof(deliveryDate) === 'object'){
+    count += 1
+    return {}
+  }
+  // case 3 = 'Tuesday, September 12th, 2017'
+  if(isNaN(newDate.month)){
+    newDate = {
+      day: moment(deliveryDate, "dddd, MMMM Do, YYYY").day(),
+      month: moment(deliveryDate, "dddd, MMMM Do, YYYY").month(),
+      year: moment(deliveryDate, "dddd, MMMM Do, YYYY").year()
+    }
+  }
+
   // case 1 = 'Invalid date' // malformed (only 1 order)
-  if(deliveryDate === 'Invalid date' || deliveryDate === 'Tuesday, August 29th' 
-  || deliveryDate === 'Tuesday September 18th 2017' || order["deliveryNote"] === 'SAMPLE' 
-  || deliveryDate === 'Friday, October 5th 2017' 
-  || deliveryDate === 'Tuesday, October 24th' || deliveryDate === 'Friday, October 27th' 
+  if(deliveryDate === 'Invalid date' || deliveryDate === 'Tuesday, August 29th'
+  || deliveryDate === 'Tuesday September 18th 2017' || order["deliveryNote"] === 'SAMPLE'
+  || deliveryDate === 'Friday, October 5th 2017'
+  || deliveryDate === 'Tuesday, October 24th' || deliveryDate === 'Friday, October 27th'
   || deliveryDate === 'Friday, November 10th' || deliveryDate === 'Friday, November 17th'
   || deliveryDate === '' || order['status'].toLowerCase() === 'cancelled') {
     count += 1
     return {}
   }
-  // case 3 = 'Tuesday, September 12th, 2017'
-  if(Array.isArray(deliveryDate)){
-    count2 += 1
-    deliveryDate = deliveryDate[0].deliveryDate
-    month = getFormattedDate(deliveryDate)
-    //TODO: go through all recurring orders.
-  }
-  // is object = Tuesday, October 24th, 2017
-  if(typeof(deliveryDate) === 'object'){
-    count += 1
-    return {}
-  }
-  month = getFormattedDate(deliveryDate)
-  if(isNaN(month)){
-    console.log(deliveryDate)
-    console.log(month)
-  }
-  // try {
-  //   console.log(month)
-
-  //   if(isNaN(month) && isNaN(parseInt(month))){
-  //     console.log(order)
-  //     console.log(count)
-  //     process.exit()
-  //   }
-  // }
-  // catch( e ){
-  //     console.error(e);
-  // }
-  newOrders.push(order)
+  newOrders.push({newDate, ...order })
   return newOrders
 }
 Meteor.methods({
@@ -118,7 +119,7 @@ Meteor.methods({
    * @param {String} email
    * @returns {Boolean} If the user's email is available or not.
    */
-   'stats.getOrders' () {
+   'stats.getOrders3' () {
     let orders = Orders.find({}).fetch()
     console.log(orders.length)
     orders = orders.filter(order => order.paid === true && order.status.toLowerCase() !== "cancelled")
@@ -127,9 +128,9 @@ Meteor.methods({
     orders.map((order, idx) => {
       const formattedOrders = getFormattedOrder(order)
       // check if empty
-      if(Object.keys(formattedOrders).length === 0 && formattedOrders.constructor === Object){
-        console.log(idx)
-      }
+      // if(Object.keys(formattedOrders).length === 0 && formattedOrders.constructor === Object){
+      //   console.log(idx)
+      // }
       if (Array.isArray(formattedOrders)) {
         newOrders = [...newOrders, ...formattedOrders]
       }
@@ -140,8 +141,19 @@ Meteor.methods({
     console.log("final len " + newOrders.length)
     console.log("empty " + count)
     console.log("reccuring: " + count2)
+    console.log(Object.keys(newOrders))
+    console.log(newOrders['2936'])
     return newOrders
    },
+   'stats.getOrders' () {
+    let stats = Stats.findOne({})
+    console.log(Object.keys(stats))
+    return {
+      revenueData: stats.revenue_data,
+      customerData: stats.customer_data,
+      churnData: stats.churn_data,
+    }
+   }
 
   //  // random shit
   //  'stats.getOrders2' () {

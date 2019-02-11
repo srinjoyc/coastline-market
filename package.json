@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/AdamBrodzinski/meteor-react-boilerplate",
   "dependencies": {
+    "chart.js": "^2.7.3",
     "classnames": "^2.2.5",
     "history": "^3.0.0",
     "indexof": "0.0.1",
@@ -25,6 +26,7 @@
     "moment": "^2.24.0",
     "rc-time-picker": "^3.5.0",
     "react": "^15.3.0",
+    "react-chartjs-2": "^2.7.4",
     "react-dom": "^15.3.0",
     "react-json-pretty": "^2.0.0",
     "react-places-autocomplete": "^7.2.0",
