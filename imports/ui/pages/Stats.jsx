@@ -42,6 +42,7 @@ export default class StatsPage extends Component {
               <th scope="col">Rank ($)</th>
               <th scope="col">Name</th>
               <th scope="col">First Order Month (m/y)</th>
+              <th scope="col">Last Order Month (m/y)</th>
               <th scope="col">Total Orders (#)</th>
               <th scope="col">Avg Basket ($)</th>
               <th scope="col">LTV ($)</th>
@@ -54,6 +55,7 @@ export default class StatsPage extends Component {
                 <th scope="row">{idx + 1}</th>
                 <td>{customer['_id'].name}</td>
                 <td>{customer.firstSalesMonth}/{customer.firstSalesYear}</td>
+                <td>{customer.lastSalesMonth}/{customer.lastSalesYear}</td>
                 <td>{customer.totalNumberOfOrders}</td>
                 <td>{Math.round(customer.avgBasketSize).toLocaleString('en')}</td>
                 <td>{Math.round(customer.totalSpend).toLocaleString('en')}</td>
