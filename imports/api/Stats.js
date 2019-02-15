@@ -155,6 +155,8 @@ Meteor.methods({
         revenueData: stats.revenue_data,
         customerData: stats.customer_data,
         churnData: stats.churn_data,
+        orderFrequencyData: stats.order_frequency_date,
+        ltvData: stats.ltv_by_join_date,
       }
     }
    }

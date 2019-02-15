@@ -11,6 +11,8 @@ export default class StatsPage extends Component {
       dataReady: false,
       revenueData: null,
       customerData: null,
+      orderFrequencyData: null,
+      ltvData: null,
       churnData: null,
     }
     // all the fields needed to create a new user
@@ -121,7 +123,7 @@ export default class StatsPage extends Component {
     )
   }
   displayUserList(){
-    const { revenueData, customerData, churnData } = this.state
+    const { revenueData, customerData, churnData, orderFrequencyData, ltvData } = this.state
     console.log(revenueData)
     const revenueGraphData = {
       labels: revenueData.months,
@@ -175,8 +177,68 @@ export default class StatsPage extends Component {
     let orderPercentageGraph = JSON.parse(JSON.stringify(revenueGraphData));
     orderPercentageGraph.datasets[0].data = churnData.order_percentage
     orderPercentageGraph.datasets[0].label = "% of Customers that placed an order"
+    // ltv data
+    let ltvFirstMonthGraph = JSON.parse(JSON.stringify(revenueGraphData));
+    ltvFirstMonthGraph.datasets[0].data = ltvData.ltv_by_first_order
+    ltvFirstMonthGraph.datasets[0].label = "LTV by First Order Date"
+    let ltvLastMonthGraph = JSON.parse(JSON.stringify(revenueGraphData));
+    ltvLastMonthGraph.datasets[0].data = ltvData.ltv_by_last_order
+    ltvLastMonthGraph.datasets[0].label = "LTV by Last Order Date"
+    // order frequency data
+    totalCustomers = Object.keys(orderFrequencyData).map((key) => {
+      return orderFrequencyData[key].num_customers
+    })
+
+    let totalCustomerGraph = JSON.parse(JSON.stringify(revenueGraphData));
+    totalCustomerGraph.datasets[0].data = totalCustomers.reverse()
+    totalCustomerGraph.datasets[0].label = "Total Customers"
     return(
       <div className="col-md-8 offset-md-2 col-12">
+        <Line
+          data={totalCustomerGraph}
+          options={{
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true,
+                      min: 0,
+                      max: 250,
+                      stepSize: 20,
+                  }
+              }]
+            },
+          }}
+        />
+        <Line
+          data={ltvFirstMonthGraph}
+          options={{
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true,
+                      min: 0,
+                      max: 25,
+                      stepSize: 1,
+                  }
+              }]
+            },
+          }}
+        />
+        <Line
+          data={ltvLastMonthGraph}
+          options={{
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true,
+                      min: 0,
+                      max: 80,
+                      stepSize: 5,
+                  }
+              }]
+            },
+          }}
+        />
         <Line
           data={revenueGraphData}
           options={{
