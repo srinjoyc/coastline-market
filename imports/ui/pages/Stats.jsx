@@ -11,6 +11,8 @@ export default class StatsPage extends Component {
       dataReady: false,
       revenueData: null,
       customerData: null,
+      productData: null,
+      currentData: null,
       orderFrequencyData: null,
       ltvData: null,
       churnData: null,
@@ -69,6 +71,37 @@ export default class StatsPage extends Component {
       </div>
     )
   }
+  displayProducts() {
+    let { productData } = this.state
+    productData = productData.slice(0, 50)
+    return(
+      <div className="col-md-8 offset-md-2 col-12 mt-5">
+        <h2> Product Leaderboard </h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Rank (#)</th>
+              <th scope="col">Name</th>
+              <th scope="col"># of Orders</th>
+              <th scope="col">GMV</th>
+            </tr>
+          </thead>
+          <tbody>
+          {productData.map((product, idx) => {
+            return(
+              <tr>
+                <th scope="row">{idx + 1}</th>
+                <td>{product['_id'].name}</td>
+                <td>{product.total}</td>
+                <td>{product.gmv}</td>
+              </tr>
+            )
+          })}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
   displayCards(){
     const { customerData, revenueData } = this.state
     let totalRevenue = revenueData.revenues.reduce((acc, rev) => {
@@ -115,6 +148,69 @@ export default class StatsPage extends Component {
               <div className="card-body">
                 <h4 className="card-title">$ {totalRevenue}</h4>
                 <p className="card-text">Total Revenue</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  displayCurrentCards(){
+    const { currentData } = this.state
+    return (
+      <div className="col-md-8 offset-md-2 col-12">
+        <div className="row">
+          <div className="col-3">
+            <div className="card mt-2 mb-2">
+              <div className="card-body">
+                <small> Total Spend </small>
+                <h4 className="card-title">$ {Math.round(currentData.current_gmv.totalSpend)}</h4>
+                <small> Avg. Basket </small>
+                <h4 className="card-title">$ {Math.round(currentData.current_gmv.avgBasketSize)}</h4>
+                <small> # of orders </small>
+                <h4 className="card-title"># {Math.round(currentData.current_gmv.totalNumberOfOrders)}</h4>
+                <p className="card-text">This Month</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="card mt-2 mb-2">
+              <div className="card-body">
+                <small> Total Spend </small>
+                <h4 className="card-title">$ {Math.round(currentData.past_month_gmv.totalSpend)}</h4>
+                <small> Avg. Basket </small>
+                <h4 className="card-title">$ {Math.round(currentData.past_month_gmv.avgBasketSize)}</h4>
+                <small> # of orders </small>
+                <h4 className="card-title"># {Math.round(currentData.past_month_gmv.totalNumberOfOrders)}</h4>
+                <p className="card-text">Last Month</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="card mt-2 mb-2">
+              <div className="card-body">
+                <small> Total Spend </small>
+                <h4 className="card-title">$ {Math.round(currentData['2018_gmv'].totalSpend)}</h4>
+                <small> Avg. Basket </small>
+                <h4 className="card-title">$ {Math.round(currentData['2018_gmv'].avgBasketSize)}</h4>
+                <small> # of orders </small>
+                <h4 className="card-title"># {Math.round(currentData['2018_gmv'].totalNumberOfOrders)}</h4>
+                <p className="card-text">2018 Month</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="card mt-2 mb-2">
+              <div className="card-body">
+                <small> Up From Last Year</small>
+                <h4 className="card-title">{Math.round(currentData['up_from_last_year_percent'])} % </h4>
+                <small> Up From Last Month </small>
+                <h4 className="card-title">{Math.round(currentData['up_from_last_month_percent'])} %</h4>
+                <small> Target GMV </small>
+                <h4 className="card-title">$ {Math.round(currentData['target_gmv'])}</h4>
+                <small> % to Target</small>
+                <h4 className="card-title"> {Math.round(currentData['percent_to_target'])} %</h4>
+                <p className="card-text">2018 Month</p>
               </div>
             </div>
           </div>
@@ -355,10 +451,16 @@ export default class StatsPage extends Component {
             {dataReady? this.displayCards() : <p> Loading... </p>}
         </div>
         <div className="row">
+            {dataReady? this.displayCurrentCards() : <p> Loading... </p>}
+        </div>
+        <div className="row">
             {dataReady? this.displayUserList() : <p> Loading... </p>}
         </div>
         <div className="row">
             {dataReady? this.displayCustomers() : <p> Loading... </p>}
+        </div>
+        <div className="row">
+            {dataReady? this.displayProducts() : <p> Loading... </p>}
         </div>
       </div>
     )

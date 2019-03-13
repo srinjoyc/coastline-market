@@ -154,6 +154,8 @@ Meteor.methods({
       return {
         revenueData: stats.revenue_data,
         customerData: stats.customer_data,
+        productData: stats.product_data,
+        currentData: stats.current_data,
         churnData: stats.churn_data,
         orderFrequencyData: stats.order_frequency_date,
         ltvData: stats.ltv_by_join_date,
