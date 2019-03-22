@@ -11,7 +11,7 @@ Meteor.methods({
       if(Meteor.userId() !== 'tNw5meMNLd3gwCZxE')
         return Meteor.Error("Not an admin or not logged in.")
       let stats = Stats.findOne({})
-      return {
+      stats = {
         revenueData: stats.revenue_data,
         customerData: stats.customer_data,
         productData: stats.product_data,
@@ -21,6 +21,7 @@ Meteor.methods({
         ltvData: stats.ltv_by_join_date,
         lastUpdated: stats.last_updated,
       }
+      return stats
     }
    }
 })
