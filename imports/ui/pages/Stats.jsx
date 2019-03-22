@@ -16,6 +16,7 @@ export default class StatsPage extends Component {
       orderFrequencyData: null,
       ltvData: null,
       churnData: null,
+      lastUpdated: null,
     }
     // all the fields needed to create a new user
     this.displayUserList = this.displayUserList.bind(this)
@@ -93,7 +94,7 @@ export default class StatsPage extends Component {
                 <th scope="row">{idx + 1}</th>
                 <td>{product['_id'].name}</td>
                 <td>{product.total}</td>
-                <td>{product.gmv}</td>
+                <td>{product.gmv.toLocaleString('en')}</td>
               </tr>
             )
           })}
@@ -103,7 +104,7 @@ export default class StatsPage extends Component {
     )
   }
   displayCards(){
-    const { customerData, revenueData } = this.state
+    const { customerData, revenueData, lastUpdated } = this.state
     let totalRevenue = revenueData.revenues.reduce((acc, rev) => {
       return acc += rev
     }, 0)
@@ -148,6 +149,7 @@ export default class StatsPage extends Component {
               <div className="card-body">
                 <h4 className="card-title">$ {totalRevenue}</h4>
                 <p className="card-text">Total Revenue</p>
+                <p className="card-text"> <strong> Last Updated:  </strong>  {lastUpdated.toString()} </p>
               </div>
             </div>
           </div>
@@ -210,7 +212,22 @@ export default class StatsPage extends Component {
                 <h4 className="card-title">$ {Math.round(currentData['target_gmv'])}</h4>
                 <small> % to Target</small>
                 <h4 className="card-title"> {Math.round(currentData['percent_to_target'])} %</h4>
-                <p className="card-text">2018 Month</p>
+                <p className="card-text">Target Stats</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="card mt-2 mb-2">
+              <div className="card-body">
+                <small> This Week GMV </small>
+                <h4 className="card-title">$ {Math.round(currentData['week_gmv']['totalSpend']).toLocaleString('en')}</h4>
+                <small> Last Week GMV </small>
+                <h4 className="card-title">$ {Math.round(currentData['past_week_gmv']['totalSpend']).toLocaleString('en')}</h4>
+                <small> This Week Total Orders </small>
+                <h4 className="card-title">{Math.round(currentData['week_gmv']['totalNumberOfOrders'])}</h4>
+                <small> Last Week Total Orders </small>
+                <h4 className="card-title"> {Math.round(currentData['past_week_gmv']['totalNumberOfOrders'])} </h4>
+                <p className="card-text">Weekly Stats</p>
               </div>
             </div>
           </div>

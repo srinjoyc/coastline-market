@@ -158,6 +158,7 @@ Meteor.methods({
         churnData: stats.churn_data,
         orderFrequencyData: stats.order_frequency_date,
         ltvData: stats.ltv_by_join_date,
+        lastUpdated: stats.last_updated,
       }
     }
    }
