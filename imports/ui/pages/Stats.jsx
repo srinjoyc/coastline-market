@@ -51,6 +51,7 @@ export default class StatsPage extends Component {
               <th scope="col">Total Orders (#)</th>
               <th scope="col">Avg Basket ($)</th>
               <th scope="col">LTV ($)</th>
+              <th scope="col">Last Invoice Id</th>
             </tr>
           </thead>
           <tbody>
@@ -64,6 +65,7 @@ export default class StatsPage extends Component {
                 <td>{customer.totalNumberOfOrders}</td>
                 <td>{Math.round(customer.avgBasketSize).toLocaleString('en')}</td>
                 <td>{Math.round(customer.totalSpend).toLocaleString('en')}</td>
+                <td>{customer.lastInvoiceId}</td>
               </tr>
             )
           })}
