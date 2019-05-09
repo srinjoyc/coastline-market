@@ -59,7 +59,7 @@ export default class StatsPage extends Component {
             return(
               <tr>
                 <th scope="row">{idx + 1}</th>
-                <td>{customer['_id'].name}</td>
+                <td>{customer.name}</td>
                 <td>{customer.firstSalesMonth}/{customer.firstSalesYear}</td>
                 <td>{customer.lastSalesMonth}/{customer.lastSalesYear}</td>
                 <td>{customer.totalNumberOfOrders}</td>
